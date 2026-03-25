@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAAS Inhibitors — Study Guide</title>
+<style>
+  :root {
+    --navy: #0f1e3d;
+    --navy-mid: #162847;
+    --navy-light: #1e3a5f;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-muted: #a8893a;
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d4;
+    --white: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--cream); color: var(--text-primary); min-height: 100vh; }
+  .header { background: var(--navy); padding: 48px 60px 40px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.15); }
+  .header-label { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+  .header h1 { font-family: Georgia, serif; font-size: 42px; color: var(--white); line-height: 1.15; margin-bottom: 16px; position: relative; z-index: 1; font-weight: normal; }
+  .header h1 span { color: var(--gold-light); }
+  .header-sub { color: rgba(255,255,255,0.6); font-size: 15px; font-weight: 300; max-width: 560px; line-height: 1.6; position: relative; z-index: 1; }
+  .header-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; position: relative; z-index: 1; }
+  .pill { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--gold-light); padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+  .nav-tabs { background: var(--navy-mid); padding: 0 60px; display: flex; border-bottom: 1px solid rgba(201,168,76,0.2); overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+  .nav-tab { padding: 16px 22px; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; user-select: none; }
+  .nav-tab:hover { color: rgba(255,255,255,0.85); }
+  .nav-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+  .content { max-width: 1100px; margin: 0 auto; padding: 48px 60px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-header { font-family: Georgia, serif; font-size: 30px; color: var(--navy); margin-bottom: 6px; font-weight: normal; }
+  .section-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+  .card { background: var(--white); border-radius: 12px; padding: 28px 32px; margin-bottom: 24px; border: 1px solid rgba(0,0,0,0.07); box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .card-title { font-family: Georgia, serif; font-size: 20px; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--cream-dark); display: flex; align-items: center; gap: 10px; font-weight: normal; }
+  .drug-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .drug-class-card { border-radius: 10px; padding: 20px; border-left: 4px solid; position: relative; overflow: hidden; }
+  .drug-class-card::after { content: attr(data-abbr); position: absolute; right: 10px; top: 10px; font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 1.5px; opacity: 0.3; text-transform: uppercase; }
+  .drug-class-card.acei { background: #eef4ff; border-color: #1e4a8a; }
+  .drug-class-card.arb  { background: #fff8ee; border-color: #c9620a; }
+  .drug-class-card.dri  { background: #f0f9f4; border-color: #2d7a5f; }
+  .drug-class-card.arni { background: #f8f0ff; border-color: #5a2d82; }
+  .drug-class-card.aldo { background: #fff0f0; border-color: #8b2a2a; }
+  .drug-class-card h3 { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 10px; text-transform: uppercase; }
+  .drug-class-card.acei h3 { color: #1e4a8a; }
+  .drug-class-card.arb h3  { color: #c9620a; }
+  .drug-class-card.dri h3  { color: #2d7a5f; }
+  .drug-class-card.arni h3 { color: #5a2d82; }
+  .drug-class-card.aldo h3 { color: #8b2a2a; }
+  .drug-class-card ul { list-style: none; padding: 0; }
+  .drug-class-card ul li { font-size: 13px; color: #333; padding: 2px 0; font-family: 'Courier New', monospace; }
+  .drug-class-card .mech { font-size: 12px; color: #555; margin-top: 10px; line-height: 1.5; }
+  .pathway { display: flex; align-items: flex-start; padding: 36px 0 16px; flex-wrap: wrap; justify-content: center; gap: 0; }
+  .pathway-step { text-align: center; min-width: 110px; }
+  .pathway-box { background: var(--navy); color: var(--white); padding: 10px 16px; border-radius: 8px; font-size: 12.5px; font-weight: 500; display: inline-block; line-height: 1.4; }
+  .pathway-box.organ { background: var(--navy-light); font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 4px; padding: 3px 10px; border-radius: 4px; }
+  .pathway-arrow-wrap { display: flex; flex-direction: column; align-items: center; padding: 0 6px; min-width: 95px; margin-top: -4px; }
+  .pathway-inhibitor { background: #fff0f0; border: 1px solid #cc3333; color: #cc3333; font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 10px; white-space: nowrap; margin-bottom: 4px; }
+  .pathway-arrow-line { color: var(--gold); font-size: 22px; line-height: 1; }
+  .pathway-enzyme { font-size: 10px; color: #666; margin-top: 2px; text-align: center; }
+  .styled-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .styled-table th { background: var(--navy); color: var(--gold-light); font-weight: 600; font-size: 11.5px; letter-spacing: 0.5px; text-transform: uppercase; padding: 12px 16px; text-align: left; }
+  .styled-table th:first-child { border-radius: 8px 0 0 0; }
+  .styled-table th:last-child  { border-radius: 0 8px 0 0; }
+  .styled-table td { padding: 11px 16px; border-bottom: 1px solid var(--cream-dark); vertical-align: top; line-height: 1.55; }
+  .styled-table tr:last-child td { border-bottom: none; }
+  .styled-table tr:nth-child(even) td { background: rgba(245,240,232,0.4); }
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 11.5px; font-weight: 600; margin: 2px 2px 2px 0; }
+  .tag-blue   { background: #ddeeff; color: #1e4a8a; }
+  .tag-orange { background: #fff0dd; color: #c9620a; }
+  .tag-green  { background: #ddf5ec; color: #2d7a5f; }
+  .tag-purple { background: #f0e5ff; color: #5a2d82; }
+  .tag-red    { background: #ffe5e5; color: #8b2a2a; }
+  .tag-gold   { background: #fdf3d9; color: #8a6500; }
+  .adr-highlight { font-family: 'Courier New', monospace; font-size: 13px; font-weight: 700; }
+  .adr-high { color: #8b2a2a; }
+  .adr-low  { color: #2d7a5f; }
+  .adr-mid  { color: #c9620a; }
+  .callout { border-radius: 10px; padding: 16px 20px; margin: 16px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .callout-icon { font-size: 19px; flex-shrink: 0; margin-top: 1px; }
+  .callout p { font-size: 13.5px; line-height: 1.6; }
+  .callout.warning { background: #fff8ec; border: 1px solid #f0c040; }
+  .callout.danger  { background: #fff0f0; border: 1px solid #e88080; }
+  .callout.info    { background: #eef4ff; border: 1px solid #90b8f0; }
+  .callout.success { background: #eef8f4; border: 1px solid #80c8a8; }
+  .mnemonic { background: var(--navy); border-radius: 12px; padding: 24px 28px; margin: 16px 0; }
+  .mnemonic-label { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+  .mnemonic-title { font-family: Georgia, serif; font-size: 28px; color: var(--white); margin-bottom: 18px; font-weight: normal; }
+  .mnemonic-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .mnemonic-item { display: flex; gap: 10px; align-items: flex-start; }
+  .mnemonic-letter { font-family: Georgia, serif; font-size: 26px; color: var(--gold-light); line-height: 1; min-width: 20px; }
+  .mnemonic-def { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.45; padding-top: 4px; }
+  .mnemonic-def strong { color: rgba(255,255,255,0.95); font-weight: 600; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .bullet-list { list-style: none; padding: 0; }
+  .bullet-list li { padding: 5px 0 5px 20px; position: relative; font-size: 13.5px; line-height: 1.55; color: #333; }
+  .bullet-list li::before { content: '\2014'; position: absolute; left: 0; color: var(--gold-muted); font-weight: 700; }
+  .bullet-list li strong { color: var(--navy); font-weight: 600; }
+  .footer { background: var(--navy); color: rgba(255,255,255,0.4); text-align: center; padding: 20px; font-size: 12px; letter-spacing: 0.3px; margin-top: 40px; }
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    .content { padding: 28px 18px; }
+    .nav-tabs { padding: 0 12px; }
+    .header { padding: 28px 20px; }
+    .header h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Pharmacology Study Guide</div>
+  <h1>RAAS <span>Inhibitors</span></h1>
+  <p class="header-sub">A complete study guide covering the renin-angiotensin-aldosterone system inhibitor drug class &mdash; mechanisms, pharmacokinetics, indications, and adverse effects.</p>
+  <div class="header-pills">
+    <span class="pill pill-btn" onclick="openPopup('acei')">ACE Inhibitors &#x2197;</span>
+    <span class="pill pill-btn" onclick="openPopup('arb')">ARBs &#x2197;</span>
+    <span class="pill pill-btn" onclick="openPopup('dri')">Direct Renin Inhibitors &#x2197;</span>
+    <span class="pill pill-btn" onclick="openPopup('arni')">ARNIs &#x2197;</span>
+    <span class="pill pill-btn" onclick="openPopup('aldo')">Aldosterone Antagonists &#x2197;</span>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="switchTab('overview',this)">Overview</div>
+  <div class="nav-tab" onclick="switchTab('mechanism',this)">Mechanism &amp; MOA</div>
+  <div class="nav-tab" onclick="switchTab('pharmacokinetics',this)">Pharmacokinetics</div>
+  <div class="nav-tab" onclick="switchTab('indications',this)">Indications</div>
+  <div class="nav-tab" onclick="switchTab('adverse',this)">Adverse Effects</div>
+  <div class="nav-tab" onclick="switchTab('compare',this)">Quick Compare</div>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<section class="section active" id="overview">
+  <p class="section-header">Overview</p>
+  <p class="section-sub">Drug classes that act on the renin-angiotensin-aldosterone system to reduce vasoconstriction and circulating blood volume.</p>
+  <div class="drug-grid">
+    <div class="drug-class-card acei" data-abbr="ACEi">
+      <h3>ACE Inhibitors</h3>
+      <ul><li>Captopril</li><li>Enalapril</li><li>Lisinopril</li><li>Benazepril</li></ul>
+      <p class="mech">Names end in <strong>-pril</strong>. Block ACE &rarr; &darr; Ang II + &uarr; bradykinin</p>
+    </div>
+    <div class="drug-class-card arb" data-abbr="ARB">
+      <h3>ARBs</h3>
+      <ul><li>Losartan</li><li>Valsartan</li><li>Telmisartan</li></ul>
+      <p class="mech">Names end in <strong>-sartan</strong>. Block AT1 receptors directly</p>
+    </div>
+    <div class="drug-class-card dri" data-abbr="DRI">
+      <h3>Direct Renin Inhibitor</h3>
+      <ul><li>Aliskiren</li></ul>
+      <p class="mech">Directly inhibits renin &rarr; blocks the entire RAAS cascade upstream</p>
+    </div>
+    <div class="drug-class-card arni" data-abbr="ARNi">
+      <h3>ARNi</h3>
+      <ul><li>Sacubitril /</li><li>Valsartan</li><li>(Entresto&reg;)</li></ul>
+      <p class="mech">ARB + neprilysin inhibitor &rarr; &uarr; natriuretic peptides</p>
+    </div>
+    <div class="drug-class-card aldo" data-abbr="AldoAntag">
+      <h3>Aldosterone Antagonist</h3>
+      <ul><li>Spironolactone</li></ul>
+      <p class="mech">Blocks mineralocorticoid receptors in distal tubule and collecting duct</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">RAAS Cascade Pathway</div>
+    <div class="pathway">
+      <div class="pathway-step"><div class="pathway-box">Angiotensinogen</div><div class="pathway-box organ">Liver</div></div>
+      <div class="pathway-arrow-wrap"><div class="pathway-inhibitor">DRI blocks here</div><div class="pathway-arrow-line">&rarr;</div><div class="pathway-enzyme">Renin (Kidney)</div></div>
+      <div class="pathway-step"><div class="pathway-box">Angiotensin I</div></div>
+      <div class="pathway-arrow-wrap"><div class="pathway-inhibitor">ACEi blocks here</div><div class="pathway-arrow-line">&rarr;</div><div class="pathway-enzyme">ACE (Lungs)</div></div>
+      <div class="pathway-step"><div class="pathway-box">Angiotensin II</div></div>
+      <div class="pathway-arrow-wrap"><div class="pathway-inhibitor">ARB / ARNi blocks here</div><div class="pathway-arrow-line">&rarr;</div><div class="pathway-enzyme">AT1 Receptor</div></div>
+      <div class="pathway-step"><div class="pathway-box">Vasoconstriction<br>+ Aldosterone &uarr;</div></div>
+    </div>
+    <div class="callout info">
+      <span class="callout-icon">&#128161;</span>
+      <p><strong>Key distinction:</strong> ACEi also prevents bradykinin degradation (hence cough/angioedema risk). ARBs do not affect bradykinin &mdash; which is why they have a significantly lower cough rate.</p>
+    </div>
+  </div>
+
+  <div class="mnemonic">
+    <div class="mnemonic-label">Memory Aid &mdash; Ang II AT1 Effects</div>
+    <div class="mnemonic-title">VASST</div>
+    <div class="mnemonic-items">
+      <div class="mnemonic-item"><span class="mnemonic-letter">V</span><span class="mnemonic-def"><strong>Vasoconstriction</strong> and &uarr; sympathetic activity</span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">A</span><span class="mnemonic-def"><strong>Aldosterone</strong> release &rarr; Na+ &amp; water retention</span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">S</span><span class="mnemonic-def"><strong>Salt reabsorption</strong> (direct renal Na+ effect)</span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">S</span><span class="mnemonic-def"><strong>Secretion</strong> of ADH &rarr; water reabsorption</span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">T</span><span class="mnemonic-def"><strong>Thirst</strong> stimulation</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MECHANISM -->
+<section class="section" id="mechanism">
+  <p class="section-header">Mechanism of Action</p>
+  <p class="section-sub">How each drug class interferes with the RAAS pathway and the resulting physiologic effects.</p>
+  <table class="styled-table">
+    <thead><tr><th>Drug Class</th><th>Mechanism</th><th>Key Physiologic Effects</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-blue">ACEi</span></td>
+        <td>Inhibits ACE enzyme &rarr; blocks Ang I&rarr;Ang II conversion AND prevents bradykinin degradation</td>
+        <td>&darr; Vasoconstriction, &darr; Aldosterone, &darr; Na+/water<br>&uarr; Bradykinin &rarr; vasodilation (but cough/angioedema risk)<br>&darr; Efferent arteriole resistance &rarr; renoprotective</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-orange">ARB</span></td>
+        <td>Blocks AT1 receptors &mdash; Ang II is produced but cannot bind to its primary receptor</td>
+        <td>&darr; Vasoconstriction, &darr; Aldosterone, &darr; Na+/water<br><strong>No effect on bradykinin</strong> &rarr; much lower cough/angioedema risk</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-green">DRI</span></td>
+        <td>Directly inhibits renin enzyme &rarr; blocks angiotensinogen&rarr;Ang I conversion (most upstream point)</td>
+        <td>&darr; Ang I, Ang II, and Aldosterone &rarr; &darr; peripheral vascular resistance</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-purple">ARNi</span></td>
+        <td>Dual action: blocks AT1 receptors + inhibits neprilysin (prevents breakdown of natriuretic peptides, bradykinin, and Ang II)</td>
+        <td>&darr; Vasoconstriction &amp; aldosterone<br>&uarr; ANP/BNP &rarr; diuresis and vasodilation<br>&uarr; Bradykinin &rarr; vasodilation</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-red">Aldosterone Antagonist</span></td>
+        <td>Blocks mineralocorticoid receptors in the distal tubule and cortical collecting duct</td>
+        <td>&darr; Na+ reabsorption, &darr; K+ excretion &rarr; diuresis without K+ loss (K+-sparing)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout warning" style="margin-top:20px">
+    <span class="callout-icon">&#9888;&#65039;</span>
+    <p><strong>Important:</strong> Because neprilysin normally degrades Ang II, inhibiting it alone would worsen vasoconstriction &mdash; that&rsquo;s why sacubitril is always paired with the ARB valsartan in Entresto&reg;.</p>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">AT1 vs AT2 Receptor Effects</div>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:700;color:#8b2a2a;margin-bottom:10px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">AT1 Receptor (Harmful Chronic Effects)</p>
+        <ul class="bullet-list">
+          <li>Vasoconstriction</li><li>&uarr; Sympathetic activity</li><li>Aldosterone + ADH release</li>
+          <li>Vascular smooth muscle proliferation</li><li>Endothelial dysfunction</li>
+          <li>Platelet aggregation</li><li>Enhanced inflammation</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-weight:700;color:#2d7a5f;margin-bottom:10px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">AT2 Receptor (Protective Effects)</p>
+        <ul class="bullet-list"><li>Vasodilation</li><li>Antiproliferative effects</li><li>Cardiovascular protection</li></ul>
+        <div class="callout success" style="margin-top:14px">
+          <span class="callout-icon">&#10003;</span>
+          <p>ARBs block AT1 but leave AT2 unaffected &mdash; the protective AT2 effects continue unimpeded.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHARMACOKINETICS -->
+<section class="section" id="pharmacokinetics">
+  <p class="section-header">Pharmacokinetics</p>
+  <p class="section-sub">Absorption, distribution, metabolism, and excretion profiles across the RAAS inhibitor classes.</p>
+  <table class="styled-table">
+    <thead><tr><th>Drug Class</th><th>Absorption</th><th>Distribution</th><th>Metabolism</th><th>Excretion / Half-life</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-blue">ACEi</span></td>
+        <td>Prodrugs have &uarr; bioavailability. Onset 15&ndash;60 min.</td>
+        <td>Minimal protein binding. Modest Vd.</td>
+        <td>Prodrugs hydrolyzed in liver to active form. Active drugs pass through unchanged.</td>
+        <td>Primarily urine. Half-life 2&ndash;24 hrs.</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-orange">ARB</span></td>
+        <td>Rapidly absorbed orally. Bioavailability varies by drug.</td>
+        <td>Protein binding 95&ndash;99%. Vd: 0.1 L/kg (candesartan) to 7 L/kg (telmisartan).</td>
+        <td>Hepatic metabolism.</td>
+        <td>Feces ~60%, urine ~35% (~4% unchanged). Half-life 2&ndash;24 hrs.</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-green">DRI (Aliskiren)</span></td>
+        <td>Only 3% bioavailability. Poor oral absorption, worsens with high-fat meals.</td>
+        <td>Protein binding ~50%.</td>
+        <td>Extent of hepatic metabolism unknown.</td>
+        <td>Feces (biliary, unchanged). Urine ~25% unchanged. Half-life 24 hrs.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="card" style="margin-top:24px">
+    <div class="card-title">Chemical Structure Notes</div>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:700;color:var(--navy);margin-bottom:10px;font-size:13px">ACEi Functional Groups</p>
+        <ul class="bullet-list">
+          <li><strong>Captopril</strong> &mdash; sulfhydryl group &rarr; antioxidant properties (1st in class)</li>
+          <li><strong>Enalapril</strong> &mdash; prodrug, hydrolyzed to enalaprilat</li>
+          <li><strong>Lisinopril</strong> &mdash; lysine derivative of enalaprilat</li>
+          <li><strong>Benazepril, fosinopril, quinapril</strong> &mdash; long-acting prodrugs</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-weight:700;color:var(--navy);margin-bottom:10px;font-size:13px">ARB Functional Groups</p>
+        <ul class="bullet-list">
+          <li>All ARBs contain a <strong>tetrazole ring</strong> (4 nitrogens + 1 carbon)</li>
+          <li>Also contain 1&ndash;2 <strong>imidazole groups</strong></li>
+          <li>Structural differences account for varying bioavailability and protein binding</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDICATIONS -->
+<section class="section" id="indications">
+  <p class="section-header">Indications</p>
+  <p class="section-sub">FDA-approved and off-label uses across the RAAS inhibitor drug classes.</p>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title" style="font-size:18px">ACEi &amp; ARB</div>
+      <p style="font-size:11.5px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#666;margin-bottom:10px">FDA-Approved</p>
+      <ul class="bullet-list">
+        <li><strong>Hypertension</strong> &mdash; 1st-line, especially with Type 2 DM, CKD, or CAD</li>
+        <li><strong>Diabetic nephropathy</strong></li>
+        <li><strong>Heart failure</strong> with reduced ejection fraction (HFrEF)</li>
+        <li><strong>STEMI</strong> &mdash; within 24 hrs improves survival in hemodynamically stable patients</li>
+      </ul>
+      <p style="font-size:11.5px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#666;margin:14px 0 10px">Off-Label</p>
+      <ul class="bullet-list">
+        <li>Non-ST-elevation ACS</li><li>Stable CAD</li>
+        <li>Proteinuric CKD</li><li>Post-transplant erythrocytosis (renal transplant)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title" style="font-size:18px">DRI &mdash; Aliskiren</div>
+        <ul class="bullet-list">
+          <li>Indicated for <strong>hypertension</strong></li>
+          <li>Used as <strong>add-on therapy</strong> when already on other antihypertensives</li>
+          <li><strong>Not recommended</strong> as initial/first-line treatment</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:18px">ARNi &mdash; Entresto&reg;</div>
+        <ul class="bullet-list">
+          <li>Indicated for <strong>chronic HFrEF</strong></li>
+          <li>Shown to <strong>reduce cardiovascular death and hospitalizations</strong> in HFrEF</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Prescribing Principles</div>
+    <ul class="bullet-list">
+      <li><strong>ACEi and ARBs are NOT typically used together</strong> (except in rare circumstances, usually by nephrologists)</li>
+      <li>Both classes are frequently combined with <strong>diuretics</strong> (most often hydrochlorothiazide) or <strong>calcium channel blockers</strong></li>
+      <li><strong>ARBs are better tolerated</strong> than ACEis &mdash; patients are more likely to adhere</li>
+      <li>An ARB is preferred when a patient has ACEi-induced cough or angioedema history</li>
+    </ul>
+  </div>
+  <div class="mnemonic">
+    <div class="mnemonic-label">Mortality Benefits &mdash; RAAS Inhibitors</div>
+    <div class="mnemonic-title">HHASD</div>
+    <div class="mnemonic-items">
+      <div class="mnemonic-item"><span class="mnemonic-letter">H</span><span class="mnemonic-def"><strong>Hypertension</strong></span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">H</span><span class="mnemonic-def"><strong>Heart failure</strong></span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">A</span><span class="mnemonic-def"><strong>Acute MI</strong></span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">S</span><span class="mnemonic-def"><strong>Stroke</strong></span></div>
+      <div class="mnemonic-item"><span class="mnemonic-letter">D</span><span class="mnemonic-def"><strong>Diabetes mellitus</strong></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVERSE EFFECTS -->
+<section class="section" id="adverse">
+  <p class="section-header">Adverse Effects &amp; Contraindications</p>
+  <p class="section-sub">ACEis carry a higher adverse effect burden than ARBs across nearly every category.</p>
+  <div class="card">
+    <div class="card-title">ACEi vs ARB Adverse Effect Comparison</div>
+    <table class="styled-table">
+      <thead><tr><th>Adverse Effect</th><th>ACEi Rate</th><th>ARB Rate</th><th>Mechanism (ACEi)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hyperkalemia</strong></td><td><span class="adr-mid adr-highlight">1%</span></td><td><span class="adr-low adr-highlight">0.3%</span></td><td>&darr; Aldosterone &rarr; &darr; K+ excretion</td></tr>
+        <tr><td><strong>Dry Cough</strong></td><td><span class="adr-high adr-highlight">10&ndash;20%</span></td><td><span class="adr-low adr-highlight">1 / 1,000</span></td><td>&uarr; Bradykinin irritates airways</td></tr>
+        <tr><td><strong>Pancreatitis</strong></td><td><span class="adr-mid adr-highlight">1 / 5,000</span></td><td><span class="adr-low adr-highlight">1 / 15,000</span></td><td>Mechanism unclear; risk 1/10 if prior ACEi pancreatitis</td></tr>
+        <tr><td><strong>Angioedema</strong></td><td><span class="adr-high adr-highlight">1 / 2,000</span></td><td><span class="adr-low adr-highlight">1 / 20,000</span></td><td>&uarr; Bradykinin &rarr; tissue swelling; potentially fatal</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title" style="font-size:18px">Additional Side Effects</div>
+      <ul class="bullet-list">
+        <li>Hypotension</li><li>Dizziness / syncope</li><li>Headache</li>
+        <li>&uarr; BUN / creatinine (rare: acute renal failure)</li>
+        <li>Diarrhea (specifically with aliskiren)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title" style="font-size:17px;color:#8b2a2a">Absolute Contraindications</div>
+        <ul class="bullet-list">
+          <li><strong>History of angioedema</strong></li>
+          <li><strong>Pregnancy</strong> &mdash; teratogenic (fetal renal injury)</li>
+          <li>Diabetic patients <strong>must NOT combine</strong> DRI with ACEi or ARB</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:17px;color:#c9620a">Relative Contraindications</div>
+        <ul class="bullet-list">
+          <li>Abnormal renal function</li>
+          <li>Aortic stenosis &mdash; afterload reduction can cause severe hypotension</li>
+          <li>Dehydration / hypovolemia</li>
+          <li>Concurrent K+-sparing diuretics &rarr; &uarr; hyperkalemia risk</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="callout danger">
+    <span class="callout-icon">&#128680;</span>
+    <p><strong>Angioedema Warning:</strong> Angioedema from ACEis can involve the tongue, glottis, or larynx and may be life-threatening. A history of ACEi-induced angioedema is an absolute contraindication to restarting any ACEi &mdash; and is a relative contraindication for ARBs (ARB risk is 10&times; lower).</p>
+  </div>
+</section>
+
+<!-- QUICK COMPARE -->
+<section class="section" id="compare">
+  <p class="section-header">Quick Comparison</p>
+  <p class="section-sub">Side-by-side reference for the main antihypertensive classes, including RAAS inhibitors and complementary drug classes.</p>
+  <table class="styled-table">
+    <thead><tr><th>Drug Class</th><th>Mechanism</th><th>Key Physiologic Effect</th><th>Primary Indications</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-blue">ACEi</span></td>
+        <td>Inhibits ACE &rarr; &darr; Ang II + &uarr; Bradykinin</td>
+        <td>&darr; Vasoconstriction, &darr; Na+/water, &uarr; Bradykinin, &darr; efferent resistance</td>
+        <td><span class="tag tag-gold">HTN</span> <span class="tag tag-gold">HF</span> <span class="tag tag-gold">MI/ACS</span> <span class="tag tag-gold">Diabetic CKD</span></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-orange">ARB</span></td>
+        <td>Blocks AT1 receptors</td>
+        <td>&darr; Vasoconstriction, &darr; Na+/water, &darr; efferent resistance. No bradykinin effect.</td>
+        <td><span class="tag tag-gold">HTN</span> <span class="tag tag-gold">HF</span> <span class="tag tag-gold">MI/ACS</span> <span class="tag tag-gold">CKD</span></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-green">DRI</span></td>
+        <td>Inhibits renin enzyme upstream</td>
+        <td>&darr; Ang I, Ang II, Aldosterone &rarr; &darr; PVR</td>
+        <td><span class="tag tag-gold">HTN (add-on)</span></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-purple">ARNi</span></td>
+        <td>ARB + neprilysin inhibitor</td>
+        <td>&darr; Vasoconstriction, &uarr; ANP/BNP, &uarr; bradykinin</td>
+        <td><span class="tag tag-gold">HFrEF</span></td>
+      </tr>
+      <tr>
+        <td>CCB</td>
+        <td>Inhibits L-type Ca2+ channels</td>
+        <td>&darr; BP, &darr; HR, &darr; afterload, &darr; myocardial O2 demand</td>
+        <td><span class="tag tag-gold">HTN</span> <span class="tag tag-gold">Stable angina</span> <span class="tag tag-gold">Vasospasm</span></td>
+      </tr>
+      <tr>
+        <td>Beta Blocker</td>
+        <td>Inhibit &beta; catecholamine receptors</td>
+        <td>&darr; HR/contractility, &darr; renin release, bronchoconstriction</td>
+        <td><span class="tag tag-gold">Acute MI</span> <span class="tag tag-gold">HF</span> <span class="tag tag-gold">A-fib</span> <span class="tag tag-gold">HTN</span></td>
+      </tr>
+      <tr>
+        <td>Thiazide Diuretic</td>
+        <td>Inhibits Na+/Cl- cotransporter in DCT</td>
+        <td>&darr; Plasma volume &rarr; &darr; BP</td>
+        <td><span class="tag tag-gold">HTN</span> <span class="tag tag-gold">Edema</span></td>
+      </tr>
+      <tr>
+        <td>Loop Diuretic</td>
+        <td>Inhibits Na+/K+/Cl- cotransporter in loop of Henle</td>
+        <td>&darr; Edema, &darr; plasma volume</td>
+        <td><span class="tag tag-gold">Edema/ascites</span> <span class="tag tag-gold">HF</span> <span class="tag tag-gold">HTN</span></td>
+      </tr>
+      <tr>
+        <td>K+-Sparing Diuretic</td>
+        <td>Blocks ENaC / inhibits aldosterone receptors in CD</td>
+        <td>&darr; Plasma volume, no K+ loss, antiandrogenic (spironolactone)</td>
+        <td><span class="tag tag-gold">HF</span> <span class="tag tag-gold">Hyperaldosteronism</span> <span class="tag tag-gold">Hirsutism</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout info" style="margin-top:20px">
+    <span class="callout-icon">&#128204;</span>
+    <p><strong>Common Combinations:</strong> ACEi/ARB + thiazide diuretic is a frequent pairing for hypertension. ACEi/ARB + CCB is another standard combination. These work through complementary mechanisms and are often available as single combination pills to improve adherence.</p>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">RAAS Inhibitors Study Guide &middot; Pharmacology</div>
+
+<style>
+.pill-btn {
+  cursor: pointer;
+  transition: all 0.18s;
+  user-select: none;
+}
+.pill-btn:hover {
+  background: rgba(201,168,76,0.32);
+  border-color: rgba(201,168,76,0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Modal overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,20,40,0.72);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+
+/* Modal card */
+.modal-card {
+  background: var(--white);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  overflow: hidden;
+  animation: popIn 0.22s ease;
+}
+@keyframes popIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.modal-header {
+  padding: 22px 26px 18px;
+  border-bottom: 2px solid var(--cream-dark);
+  position: relative;
+}
+.modal-class-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.modal-title {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  color: var(--navy);
+  font-weight: normal;
+  margin-bottom: 4px;
+}
+.modal-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.modal-close {
+  position: absolute;
+  top: 18px; right: 20px;
+  background: var(--cream-dark);
+  border: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: #ddd; }
+
+.modal-body {
+  padding: 20px 26px;
+}
+.modal-row {
+  margin-bottom: 14px;
+}
+.modal-row-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.modal-row-value {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.55;
+}
+.modal-row-value .mono {
+  font-family: 'Courier New', monospace;
+  font-size: 12.5px;
+  background: var(--cream);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin: 1px 2px 1px 0;
+  display: inline-block;
+}
+
+.modal-footer {
+  padding: 14px 26px 20px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--cream-dark);
+}
+.modal-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+.modal-btn.overview {
+  background: var(--navy);
+  color: var(--gold-light);
+}
+.modal-btn.overview:hover { background: #162847; }
+.modal-btn.mechanism {
+  background: var(--cream-dark);
+  color: var(--navy);
+}
+.modal-btn.mechanism:hover { background: #ddd6c4; }
+</style>
+
+<!-- Modal -->
+<div class="modal-overlay" id="drugModal" onclick="closeOnOverlay(event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-class-tag" id="modalTag"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-subtitle" id="modalSubtitle"></div>
+      <button class="modal-close" onclick="closePopup()">&#x2715;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="modal-btn overview" id="modalOverviewBtn" onclick="">&#x1F4D6; Go to Overview</button>
+      <button class="modal-btn mechanism" id="modalMechBtn" onclick="">&#x1F9EC; Go to Mechanism</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+var DRUG_DATA = {
+  acei: {
+    tag: 'ACEi', color: '#1e4a8a', tagBg: '#ddeeff',
+    title: 'ACE Inhibitors',
+    subtitle: 'Names end in -pril',
+    drugs: ['Captopril', 'Enalapril', 'Lisinopril', 'Benazepril'],
+    mechanism: 'Inhibit ACE → block Ang I→Ang II conversion AND prevent bradykinin degradation',
+    effects: '↓ Vasoconstriction, ↓ Aldosterone, ↑ Bradykinin → vasodilation (cough/angioedema risk), ↓ Efferent arteriole resistance',
+    indications: 'HTN (1st-line), HFrEF, Diabetic nephropathy, STEMI',
+    adr: 'Dry cough (10–20%), Angioedema (1/2,000), Hyperkalemia (1%), Pancreatitis (1/5,000)',
+    overviewAnchor: 'overview', mechAnchor: 'mechanism'
+  },
+  arb: {
+    tag: 'ARB', color: '#c9620a', tagBg: '#fff0dd',
+    title: 'Angiotensin Receptor Blockers',
+    subtitle: 'Names end in -sartan',
+    drugs: ['Losartan', 'Valsartan', 'Telmisartan'],
+    mechanism: 'Block AT1 receptors — Ang II is produced but cannot bind to its receptor',
+    effects: '↓ Vasoconstriction, ↓ Aldosterone, ↓ Na+/water. NO effect on bradykinin — much lower cough/angioedema risk',
+    indications: 'HTN, HFrEF, Diabetic nephropathy, CKD, STEMI',
+    adr: 'Cough (1/1,000), Angioedema (1/20,000), Hyperkalemia (0.3%)',
+    overviewAnchor: 'overview', mechAnchor: 'mechanism'
+  },
+  dri: {
+    tag: 'DRI', color: '#2d7a5f', tagBg: '#ddf5ec',
+    title: 'Direct Renin Inhibitor',
+    subtitle: 'Aliskiren only',
+    drugs: ['Aliskiren'],
+    mechanism: 'Directly inhibits renin → blocks angiotensinogen→Ang I conversion (most upstream point)',
+    effects: '↓ Ang I, Ang II, and Aldosterone → ↓ peripheral vascular resistance',
+    indications: 'Hypertension (add-on only, NOT first-line)',
+    adr: 'Diarrhea, Hyperkalemia. Avoid combining with ACEi/ARB in diabetics',
+    overviewAnchor: 'overview', mechAnchor: 'mechanism'
+  },
+  arni: {
+    tag: 'ARNi', color: '#5a2d82', tagBg: '#f0e5ff',
+    title: 'Angiotensin Receptor-Neprilysin Inhibitor',
+    subtitle: 'Sacubitril / Valsartan (Entresto®)',
+    drugs: ['Sacubitril / Valsartan', '(Entresto®)'],
+    mechanism: 'Dual action: blocks AT1 receptors + inhibits neprilysin (prevents breakdown of natriuretic peptides, bradykinin, and Ang II)',
+    effects: '↓ Vasoconstriction & Aldosterone, ↑ ANP/BNP → diuresis, ↑ Bradykinin → vasodilation',
+    indications: 'Chronic HFrEF only — reduces cardiovascular death & hospitalizations',
+    adr: 'Hypotension, Hyperkalemia, Angioedema. Neprilysin inhibitor must be paired with ARB (not ACEi)',
+    overviewAnchor: 'overview', mechAnchor: 'mechanism'
+  },
+  aldo: {
+    tag: 'Aldo Antag.', color: '#8b2a2a', tagBg: '#ffe5e5',
+    title: 'Aldosterone Antagonist',
+    subtitle: 'Spironolactone',
+    drugs: ['Spironolactone'],
+    mechanism: 'Blocks mineralocorticoid receptors in the distal tubule and cortical collecting duct',
+    effects: '↓ Na+ reabsorption, ↓ K+ excretion → diuresis without K+ loss (K+-sparing). Antiandrogenic effects.',
+    indications: 'HF, Edema/ascites, Hyperaldosteronism, Hirsutism in women',
+    adr: 'Hyperkalemia, Gynecomastia (antiandrogenic), Menstrual irregularities',
+    overviewAnchor: 'overview', mechAnchor: 'mechanism'
+  }
+};
+
+function openPopup(key) {
+  var d = DRUG_DATA[key];
+  if (!d) return;
+
+  document.getElementById('modalTag').textContent = d.tag;
+  document.getElementById('modalTag').style.color = d.color;
+  document.getElementById('modalTitle').textContent = d.title;
+  document.getElementById('modalSubtitle').textContent = d.subtitle;
+
+  var body = document.getElementById('modalBody');
+  body.innerHTML = [
+    row('Drug Names', d.drugs.map(function(dr){ return '<span class="mono">' + dr + '</span>'; }).join(' ')),
+    row('Mechanism', d.mechanism),
+    row('Physiologic Effects', d.effects),
+    row('Primary Indications', d.indications),
+    row('Key Adverse Effects', d.adr),
+  ].join('');
+
+  var tabs = document.querySelectorAll('.nav-tab');
+  document.getElementById('modalOverviewBtn').onclick = function() {
+    closePopup();
+    switchTab('overview', tabs[0]);
+  };
+  document.getElementById('modalMechBtn').onclick = function() {
+    closePopup();
+    switchTab('mechanism', tabs[1]);
+  };
+
+  document.getElementById('drugModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function row(label, value) {
+  return '<div class="modal-row"><div class="modal-row-label">' + label + '</div><div class="modal-row-value">' + value + '</div></div>';
+}
+
+function closePopup() {
+  document.getElementById('drugModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeOnOverlay(e) {
+  if (e.target === document.getElementById('drugModal')) closePopup();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePopup();
+});
+</script>
+</body>
+</html>
