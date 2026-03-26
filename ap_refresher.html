@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A&P Refresher — 11 Organ Systems</title>
+<style>
+  :root {
+    --navy: #0f1e3d; --navy-mid: #162847; --navy-light: #1e3a5f;
+    --gold: #c9a84c; --gold-light: #e8c96a; --gold-muted: #a8893a;
+    --cream: #f5f0e8; --cream-dark: #ede6d4; --white: #ffffff;
+    --text-primary: #1a1a2e; --text-secondary: #4a4a6a; --lcream: #faf7f2;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; background:var(--cream); color:var(--text-primary); min-height:100vh; }
+
+  .header { background:var(--navy); padding:40px 60px 36px; position:relative; overflow:hidden; }
+  .header::before { content:''; position:absolute; top:-60px; right:-60px; width:300px; height:300px; border-radius:50%; border:1px solid rgba(201,168,76,0.12); }
+  .header-label { font-family:'Courier New',monospace; font-size:10px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:10px; }
+  .header h1 { font-family:Georgia,serif; font-size:38px; color:var(--white); font-weight:normal; margin-bottom:10px; position:relative; z-index:1; }
+  .header h1 span { color:var(--gold-light); }
+  .header-sub { color:rgba(255,255,255,0.55); font-size:14px; font-weight:300; max-width:600px; line-height:1.6; position:relative; z-index:1; }
+
+  .system-selector { background:var(--navy-mid); border-bottom:1px solid rgba(201,168,76,0.2); position:sticky; top:0; z-index:100; overflow-x:auto; }
+  .system-tabs { display:flex; min-width:max-content; padding:0 20px; }
+  .sys-tab { padding:13px 16px; color:rgba(255,255,255,0.45); font-size:11.5px; font-weight:500; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; white-space:nowrap; user-select:none; display:flex; align-items:center; gap:6px; }
+  .sys-tab:hover { color:rgba(255,255,255,0.8); }
+  .sys-tab.active { color:var(--gold-light); border-bottom-color:var(--gold); }
+  .sys-tab .num { font-family:'Courier New',monospace; font-size:9px; opacity:0.5; }
+
+  .content { max-width:1100px; margin:0 auto; padding:44px 60px; }
+  .system-section { display:none; }
+  .system-section.active { display:block; }
+
+  .sys-header { display:flex; align-items:flex-start; gap:20px; margin-bottom:28px; padding-bottom:20px; border-bottom:2px solid var(--cream-dark); }
+  .sys-icon { width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+  .sys-title { font-family:Georgia,serif; font-size:28px; color:var(--navy); font-weight:normal; margin-bottom:4px; }
+  .sys-tagline { font-size:13px; color:var(--text-secondary); font-style:italic; }
+
+  /* SECTION BLOCKS */
+  .block { background:var(--white); border-radius:12px; padding:22px 24px; margin-bottom:18px; border:1px solid rgba(0,0,0,0.06); box-shadow:0 2px 8px rgba(0,0,0,0.03); }
+  .block-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--cream-dark); }
+  .block-icon { font-size:18px; }
+  .block-title { font-family:'Courier New',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; }
+  .block.structures .block-title { color:#1e4a8a; }
+  .block.functions  .block-title { color:#2d7a5f; }
+  .block.clinical   .block-title { color:#8b2a2a; }
+  .block.pathology  .block-title { color:#c9620a; }
+  .block.labs       .block-title { color:#5a2d82; }
+  .block.meds       .block-title { color:#2d5f7a; }
+  .block.diagnostics .block-title { color:#7a5f1e; }
+  .block.education  .block-title { color:#3d6b2d; }
+
+  .block.structures { border-left:4px solid #1e4a8a; }
+  .block.functions  { border-left:4px solid #2d7a5f; }
+  .block.clinical   { border-left:4px solid #8b2a2a; }
+  .block.pathology  { border-left:4px solid #c9620a; }
+  .block.labs       { border-left:4px solid #5a2d82; }
+  .block.meds       { border-left:4px solid #2d5f7a; }
+  .block.diagnostics{ border-left:4px solid #7a5f1e; }
+  .block.education  { border-left:4px solid #3d6b2d; }
+
+  /* TWO COLUMN GRID */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; margin-bottom:18px; }
+
+  .item-list { list-style:none; padding:0; }
+  .item-list li { font-size:12.5px; line-height:1.55; color:#333; padding:4px 0 4px 16px; position:relative; border-bottom:1px solid var(--cream-dark); }
+  .item-list li:last-child { border-bottom:none; }
+  .item-list li::before { content:'—'; position:absolute; left:0; color:var(--gold-muted); font-weight:700; font-size:11px; }
+  .item-list li strong { color:var(--navy); font-weight:600; }
+
+  /* PATHOLOGY CARDS */
+  .path-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+  .path-card { background:var(--lcream); border-radius:8px; padding:14px; border-left:3px solid #c9620a; }
+  .path-name { font-size:12px; font-weight:700; color:#c9620a; margin-bottom:4px; }
+  .path-desc { font-size:11.5px; color:#555; line-height:1.5; }
+
+  /* LAB TABLE */
+  .lab-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .lab-table th { background:var(--navy); color:var(--gold-light); font-size:10px; letter-spacing:0.5px; text-transform:uppercase; padding:8px 10px; text-align:left; }
+  .lab-table td { padding:7px 10px; border-bottom:1px solid var(--cream-dark); vertical-align:top; line-height:1.45; }
+  .lab-table tr:last-child td { border-bottom:none; }
+  .lab-table tr:nth-child(even) td { background:rgba(245,240,232,0.4); }
+  .lab-normal { color:#2d7a5f; font-weight:600; font-family:'Courier New',monospace; font-size:11px; }
+  .lab-flag { color:#8b2a2a; font-size:11px; }
+
+  /* MED TAGS */
+  .med-grid { display:flex; flex-wrap:wrap; gap:8px; }
+  .med-tag { background:#eef4ff; border:1px solid #90b8f0; color:#1e4a8a; padding:4px 12px; border-radius:14px; font-size:11.5px; font-weight:500; }
+  .med-tag.warn { background:#fff8ec; border-color:#f0c040; color:#7a5f00; }
+  .med-note { font-size:12px; color:var(--text-secondary); margin-top:10px; line-height:1.5; }
+
+  /* NURSING IMPORTANCE */
+  .nursing-importance { background:linear-gradient(135deg,#0f1e3d 0%,#1e3a5f 100%); border-radius:12px; padding:22px 26px; margin-bottom:18px; display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:flex-start; }
+  .nursing-icon { font-size:28px; margin-top:2px; }
+  .nursing-label { font-family:'Courier New',monospace; font-size:9px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:6px; }
+  .nursing-title { font-family:Georgia,serif; font-size:16px; color:var(--white); font-weight:normal; margin-bottom:10px; line-height:1.4; }
+  .nursing-points { display:flex; flex-direction:column; gap:6px; }
+  .nursing-point { font-size:12px; color:rgba(255,255,255,0.7); line-height:1.5; padding-left:14px; position:relative; }
+  .nursing-point::before { content:'✦'; position:absolute; left:0; color:var(--gold-muted); font-size:9px; top:3px; }
+  .nursing-point strong { color:var(--gold-light); font-weight:600; }
+
+  /* REMEMBER BOX */
+  .remember-box { background:var(--navy); border-radius:12px; padding:20px 24px; margin-bottom:18px; }
+  .remember-label { font-family:'Courier New',monospace; font-size:9px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:8px; }
+  .remember-title { font-family:Georgia,serif; font-size:18px; color:var(--white); font-weight:normal; margin-bottom:12px; }
+  .remember-items { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:8px; }
+  .remember-item { font-size:12px; color:rgba(255,255,255,0.7); line-height:1.5; padding:8px 12px; background:rgba(255,255,255,0.06); border-radius:8px; border-left:2px solid var(--gold-muted); }
+  .remember-item strong { color:var(--gold-light); font-weight:600; }
+
+  .footer { background:var(--navy); color:rgba(255,255,255,0.4); text-align:center; padding:20px; font-size:12px; margin-top:40px; }
+
+  @media (max-width:768px) {
+    .header { padding:28px 20px; } .header h1 { font-size:26px; }
+    .content { padding:28px 18px; }
+    .two-col, .three-col { grid-template-columns:1fr; }
+    .system-tabs { padding:0 8px; } .sys-tab { padding:11px 10px; font-size:11px; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-label">A&amp;P Refresher &mdash; Pre-Nursing</div>
+  <h1>The 11 <span>Organ Systems</span></h1>
+  <p class="header-sub">Key structures, functions, pathologies, lab values, medications, diagnostics, patient education, and clinical nursing connections for all 11 major organ systems.</p>
+</div>
+<div class="system-selector">
+  <div class="system-tabs">
+    <div class="sys-tab active" onclick="switchSys('integumentary',this)"><span class="num">01</span>Integumentary</div>
+    <div class="sys-tab" onclick="switchSys('skeletal',this)"><span class="num">02</span>Skeletal</div>
+    <div class="sys-tab" onclick="switchSys('muscular',this)"><span class="num">03</span>Muscular</div>
+    <div class="sys-tab" onclick="switchSys('nervous',this)"><span class="num">04</span>Nervous</div>
+    <div class="sys-tab" onclick="switchSys('endocrine',this)"><span class="num">05</span>Endocrine</div>
+    <div class="sys-tab" onclick="switchSys('cardiovascular',this)"><span class="num">06</span>Cardiovascular</div>
+    <div class="sys-tab" onclick="switchSys('lymphatic',this)"><span class="num">07</span>Lymphatic</div>
+    <div class="sys-tab" onclick="switchSys('respiratory',this)"><span class="num">08</span>Respiratory</div>
+    <div class="sys-tab" onclick="switchSys('digestive',this)"><span class="num">09</span>Digestive</div>
+    <div class="sys-tab" onclick="switchSys('urinary',this)"><span class="num">10</span>Urinary</div>
+    <div class="sys-tab" onclick="switchSys('reproductive',this)"><span class="num">11</span>Reproductive</div>
+  </div>
+</div>
+<div class="content">
+
+<section class="system-section active" id="integumentary">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#fff0e0">🧴</div>
+    <div><div class="sys-title">Integumentary System</div><div class="sys-tagline">The body's first line of defense — skin, hair, and nails</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Epidermis</strong> — outermost layer; avascular; 5 layers (Basale→Spinosum→Granulosum→Lucidum→Corneum)</li><li><strong>Dermis</strong> — connective tissue; contains nerves, blood vessels, hair follicles, sweat/sebaceous glands</li><li><strong>Hypodermis</strong> — subcutaneous fat; insulation, cushioning, energy storage</li><li><strong>Sebaceous glands</strong> — secrete sebum; lubricate skin and hair</li><li><strong>Eccrine sweat glands</strong> — whole body; thermoregulation</li><li><strong>Apocrine sweat glands</strong> — axillae/groin; activated at puberty</li><li><strong>Melanocytes</strong> — produce melanin; UV protection; in stratum basale</li><li><strong>Langerhans cells</strong> — immune surveillance in epidermis</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Protection</strong> — physical barrier against pathogens, UV, chemicals, dehydration</li><li><strong>Thermoregulation</strong> — sweating cools; vasoconstriction/dilation adjusts heat loss</li><li><strong>Sensation</strong> — touch, pain, pressure, temperature receptors</li><li><strong>Vitamin D synthesis</strong> — UV converts 7-dehydrocholesterol → Vitamin D3</li><li><strong>Excretion</strong> — small amounts of NaCl, urea, water via sweat</li><li><strong>Immune defense</strong> — Langerhans cells detect and present antigens</li><li><strong>Water barrier</strong> — keratin and lipids prevent excess water loss</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Pressure Injury</div><div class="path-desc">Tissue damage from sustained pressure; staged I–IV + unstageable; sacrum/heels most common</div></div><div class="path-card"><div class="path-name">Cellulitis</div><div class="path-desc">Bacterial skin infection; warm, red, swollen, painful; may have fever; IV antibiotics for severe cases</div></div><div class="path-card"><div class="path-name">Burns</div><div class="path-desc">Classified by depth (superficial→full thickness) and BSA; fluid resuscitation critical in major burns</div></div><div class="path-card"><div class="path-name">Psoriasis</div><div class="path-desc">Autoimmune; rapid skin cell turnover; silvery plaques; chronic; topical steroids, biologics</div></div><div class="path-card"><div class="path-name">Eczema (Atopic Dermatitis)</div><div class="path-desc">Inflammatory; intense itching; impaired skin barrier; moisturizers, topical steroids</div></div><div class="path-card"><div class="path-name">Skin Cancer</div><div class="path-desc">BCC (most common), SCC, Melanoma (most deadly); ABCDE rule for melanoma screening</div></div><div class="path-card"><div class="path-name">Herpes Zoster (Shingles)</div><div class="path-desc">Reactivation of varicella-zoster; painful dermatomal rash; contact/airborne precautions</div></div><div class="path-card"><div class="path-name">Wound Infection</div><div class="path-desc">Redness, warmth, purulent drainage, odor, dehiscence; culture before antibiotics</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>WBC</strong></td><td class="lab-normal">4,500–11,000/µL</td><td class="lab-flag">↑ infection/inflammation; ↓ immunosuppression</td></tr><tr><td><strong>Culture & Sensitivity</strong></td><td class="lab-normal">N/A — no growth</td><td class="lab-flag">Identifies organism + effective antibiotic</td></tr><tr><td><strong>Albumin</strong></td><td class="lab-normal">3.5–5.0 g/dL</td><td class="lab-flag">↓ poor nutrition → impaired wound healing</td></tr><tr><td><strong>Prealbumin</strong></td><td class="lab-normal">15–36 mg/dL</td><td class="lab-flag">Sensitive marker of nutritional status; ↓ = malnutrition</td></tr><tr><td><strong>Glucose</strong></td><td class="lab-normal">70–100 mg/dL fasting</td><td class="lab-flag">↑ impairs immune function and wound healing</td></tr><tr><td><strong>Hemoglobin</strong></td><td class="lab-normal">M: 13.5–17.5 | F: 12–16 g/dL</td><td class="lab-flag">↓ impairs O2 delivery to healing tissue</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>Wound culture</strong> — swab or biopsy to identify infecting organism</li><li><strong>Skin biopsy</strong> — definitive diagnosis for suspicious lesions</li><li><strong>Wood's lamp exam</strong> — UV light detects fungal infections (fluorescent glow)</li><li><strong>Patch testing</strong> — identifies contact allergens</li><li><strong>Tzanck smear</strong> — herpes/varicella diagnosis from vesicle base</li><li><strong>Dermoscopy</strong> — magnified view of pigmented lesions for cancer screening</li><li><strong>Braden Scale</strong> — pressure injury risk assessment tool (not a lab but key diagnostic)</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Topical Antibiotics (Mupirocin, Bacitracin)</span><span class="med-tag">Antifungals (Clotrimazole, Nystatin)</span><span class="med-tag">Topical Corticosteroids</span><span class="med-tag">Wound Dressings (Hydrocolloid, Alginate, Foam)</span><span class="med-tag">Silver Sulfadiazine (Burns)</span><span class="med-tag">Acyclovir/Valacyclovir (Herpes Zoster)</span><span class="med-tag">Antihistamines (Diphenhydramine)</span><span class="med-tag">Biologics (Dupilumab for eczema)</span></div>
+    <p class="med-note">Key nursing consideration: always assess for allergy before applying topical agents; rotate transdermal patch sites.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Sun protection</strong> — SPF 30+ daily; reapply every 2 hours; avoid peak UV hours 10am–4pm</li><li><strong>Skin self-exam</strong> — monthly; ABCDE rule; report changes to provider</li><li><strong>Wound care at home</strong> — keep clean and covered; watch for infection signs (redness, warmth, pus, odor)</li><li><strong>Moisturize</strong> — apply after bathing to lock in moisture; avoid harsh soaps</li><li><strong>Pressure injury prevention</strong> — reposition every 2 hours; inspect bony prominences daily</li><li><strong>Diabetes skin care</strong> — daily foot inspection; well-fitting shoes; report any sores immediately</li><li><strong>Medication compliance</strong> — complete antibiotic course; do not stop steroids abruptly</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Skin is your first assessment — it tells you more than any monitor</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Every room entry is a skin assessment.</strong> Color, moisture, turgor, and integrity give you cardiovascular, hydration, and infection data before you touch the patient.</div><div class="nursing-point"><strong>Pressure injuries are nurse-sensitive quality indicators.</strong> Your repositioning schedule, surface selection, and moisture management directly determine whether they develop.</div><div class="nursing-point"><strong>Wound care is a daily nursing skill.</strong> You assess, stage, dress, and document wounds — and recognize signs of infection before they become systemic.</div><div class="nursing-point"><strong>Skin changes signal systemic problems.</strong> Pallor = anemia/shock; cyanosis = hypoxia; jaundice = liver/bilirubin; bronze = adrenal insufficiency.</div><div class="nursing-point"><strong>IV and medication sites are skin access points.</strong> You monitor for infiltration, phlebitis, and infection at every assessment.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title">Skin layers: <em>Babe Spits Gravy Like Crazy</em> (Basale→Spinosum→Granulosum→Lucidum→Corneum)</div>
+    <div class="remember-items"><div class="remember-item"><strong>Pallor</strong> = ↓ perfusion/anemia | <strong>Cyanosis</strong> = hypoxia | <strong>Jaundice</strong> = ↑ bilirubin</div><div class="remember-item"><strong>Pressure injury staging</strong>: I=red skin | II=partial thickness | III=full thickness | IV=bone/tendon</div><div class="remember-item"><strong>Rule of Nines</strong>: Head 9%, each arm 9%, chest 18%, back 18%, each leg 18%, perineum 1%</div><div class="remember-item"><strong>Braden Scale</strong>: ≤18 = at risk; ≤9 = very high risk for pressure injury</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="skeletal">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#eef4ff">🦴</div>
+    <div><div class="sys-title">Skeletal System</div><div class="sys-tagline">Framework, protection, and the factory for blood cells</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>206 bones</strong> in adult; 270 at birth (fuse over time)</li><li><strong>Axial skeleton</strong> — skull, vertebral column (33 vertebrae), sternum, ribs (80 bones)</li><li><strong>Appendicular skeleton</strong> — limbs, shoulder/pelvic girdles (126 bones)</li><li><strong>Compact bone</strong> — dense outer layer; haversian canals carry blood vessels</li><li><strong>Spongy (cancellous) bone</strong> — inner lattice; red bone marrow in spaces</li><li><strong>Periosteum</strong> — outer bone covering; highly innervated (pain); vascular</li><li><strong>Cartilage</strong> — hyaline (joints), fibrocartilage (discs), elastic (ear/epiglottis)</li><li><strong>Ligaments</strong> — bone to bone | <strong>Tendons</strong> — muscle to bone</li><li><strong>Joint types</strong> — synarthrosis (immovable), amphiarthrosis (slightly movable), diarthrosis (freely movable)</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Support</strong> — structural framework; maintains body shape</li><li><strong>Protection</strong> — skull→brain; vertebrae→spinal cord; ribs→heart/lungs</li><li><strong>Movement</strong> — levers for muscle attachment</li><li><strong>Hematopoiesis</strong> — red blood cell production in red bone marrow</li><li><strong>Mineral storage</strong> — 99% of body calcium; 85% of phosphorus stored in bone</li><li><strong>Fat storage</strong> — yellow bone marrow stores adipose tissue</li><li><strong>Hormone production</strong> — osteocalcin regulates insulin secretion and energy metabolism</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Osteoporosis</div><div class="path-desc">↓ bone density; silent until fracture; hip/vertebral fractures common; bisphosphonates + calcium/Vit D</div></div><div class="path-card"><div class="path-name">Fractures</div><div class="path-desc">Break in bone continuity; types: closed, open, greenstick, comminuted, stress; 5 P's of compartment syndrome</div></div><div class="path-card"><div class="path-name">Osteoarthritis</div><div class="path-desc">Wear-and-tear cartilage degeneration; pain with use; joint stiffness; most common joint disease</div></div><div class="path-card"><div class="path-name">Rheumatoid Arthritis</div><div class="path-desc">Autoimmune synovial inflammation; morning stiffness >1hr; symmetric joints; DMARDs/biologics</div></div><div class="path-card"><div class="path-name">Osteomyelitis</div><div class="path-desc">Bone infection; S. aureus most common; localized pain, fever, ↑ WBC; IV antibiotics 4–6 weeks</div></div><div class="path-card"><div class="path-name">Gout</div><div class="path-desc">Uric acid crystal deposits in joints; great toe (podagra); acute pain/swelling; allopurinol/colchicine</div></div><div class="path-card"><div class="path-name">Bone Cancer</div><div class="path-desc">Primary (osteosarcoma) or metastatic; pain worse at night; pathological fractures; chemo/surgery</div></div><div class="path-card"><div class="path-name">Compartment Syndrome</div><div class="path-desc">↑ pressure in fascial compartment; emergency; 5 P's; fasciotomy may be required</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>Calcium (total)</strong></td><td class="lab-normal">8.5–10.5 mg/dL</td><td class="lab-flag">↓ tetany/seizures; ↑ kidney stones/cardiac changes</td></tr><tr><td><strong>Phosphorus</strong></td><td class="lab-normal">2.5–4.5 mg/dL</td><td class="lab-flag">Inverse relationship with calcium; ↑ renal failure</td></tr><tr><td><strong>Alkaline Phosphatase</strong></td><td class="lab-normal">44–147 IU/L</td><td class="lab-flag">↑ bone disease, Paget's, healing fractures, liver disease</td></tr><tr><td><strong>Uric Acid</strong></td><td class="lab-normal">M: 3.5–7.2 | F: 2.6–6.0 mg/dL</td><td class="lab-flag">↑ gout; monitor with allopurinol therapy</td></tr><tr><td><strong>ESR/CRP</strong></td><td class="lab-normal">ESR <20 | CRP <1.0 mg/dL</td><td class="lab-flag">↑ inflammation; nonspecific; RA/osteomyelitis monitoring</td></tr><tr><td><strong>Vitamin D (25-OH)</strong></td><td class="lab-normal">20–50 ng/mL</td><td class="lab-flag">↓ osteomalacia, osteoporosis risk; supplement if deficient</td></tr><tr><td><strong>PTH</strong></td><td class="lab-normal">10–65 pg/mL</td><td class="lab-flag">↑ hyperparathyroidism (↑ Ca); ↓ hypoparathyroidism (↓ Ca)</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>X-ray</strong> — first-line for fractures; shows bone density changes</li><li><strong>DEXA scan</strong> — gold standard for bone density; T-score: -1 to -2.5 = osteopenia; <-2.5 = osteoporosis</li><li><strong>MRI</strong> — soft tissue, cartilage, early osteomyelitis, bone marrow</li><li><strong>CT scan</strong> — complex fractures, surgical planning</li><li><strong>Bone scan (nuclear)</strong> — detects metastases, infection, stress fractures</li><li><strong>Arthrocentesis</strong> — joint fluid aspiration; crystal analysis for gout/pseudogout</li><li><strong>Bone biopsy</strong> — definitive diagnosis for bone cancer or osteomyelitis</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Bisphosphonates (Alendronate, Zoledronic acid)</span><span class="med-tag">Calcium + Vitamin D supplements</span><span class="med-tag">NSAIDs (Ibuprofen, Naproxen)</span><span class="med-tag">Colchicine (gout)</span><span class="med-tag">Allopurinol (gout prevention)</span><span class="med-tag">DMARDs (Methotrexate)</span><span class="med-tag">Biologics (Adalimumab/Humira)</span><span class="med-tag">Corticosteroids</span><span class="med-tag">Opioid analgesics</span><span class="med-tag">Calcitonin</span></div>
+    <p class="med-note">Nursing consideration: bisphosphonates — give on empty stomach with 8 oz water; patient must stay upright 30–60 min to prevent esophageal irritation.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Calcium and Vitamin D intake</strong> — 1000–1200mg calcium/day; 600–800 IU Vit D/day; dairy, leafy greens, fortified foods</li><li><strong>Weight-bearing exercise</strong> — walking, dancing, resistance training builds bone density</li><li><strong>Fall prevention</strong> — remove rugs, grab bars in bathroom, adequate lighting, review medications that cause dizziness</li><li><strong>Bisphosphonate instructions</strong> — take on empty stomach; remain upright 30–60 min; take with full glass of water</li><li><strong>Joint protection for arthritis</strong> — use assistive devices; avoid repetitive stress; proper body mechanics</li><li><strong>Cast/splint care</strong> — keep dry; do not insert objects to scratch; report numbness, tingling, increased pain</li><li><strong>Report warning signs</strong> — severe pain, new swelling, loss of function — could indicate fracture or compartment syndrome</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Bones break, calcium goes wrong, and falls happen — you are the prevention</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Fall prevention is a top nursing priority.</strong> Understanding bone fragility — especially in elderly, osteoporotic, or steroid-treated patients — shapes every mobility and safety assessment.</div><div class="nursing-point"><strong>Fractures require neurovascular monitoring.</strong> The 6 P's (pain, pressure, paralysis, paresthesia, pallor, pulselessness) are your post-injury assessment framework.</div><div class="nursing-point"><strong>Calcium imbalances cause life-threatening symptoms.</strong> You need to recognize Chvostek's sign, Trousseau's sign, and know which medications cause hypocalcemia.</div><div class="nursing-point"><strong>Post-surgical orthopedic care is complex.</strong> Hip/knee replacements require specific positioning restrictions, DVT prophylaxis, and early mobility protocols.</div><div class="nursing-point"><strong>Bone marrow suppression affects your most vulnerable patients.</strong> Chemotherapy and radiation impair hematopoiesis — you monitor for pancytopenia complications.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>Ligament = bone to Bone (L to B) | Tendon = muscle to boNe (T to N)</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>Red marrow</strong> = makes blood cells | <strong>Yellow marrow</strong> = stores fat</div><div class="remember-item"><strong>Chvostek's sign</strong>: tap facial nerve → facial twitch = hypocalcemia</div><div class="remember-item"><strong>Trousseau's sign</strong>: inflate BP cuff → carpopedal spasm = hypocalcemia</div><div class="remember-item"><strong>DEXA T-score</strong>: >-1 normal | -1 to -2.5 osteopenia | <-2.5 osteoporosis</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="muscular">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#fff0f0">💪</div>
+    <div><div class="sys-title">Muscular System</div><div class="sys-tagline">Movement, posture, and heat generation</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Skeletal muscle</strong> — voluntary; striated; attached to bones via tendons; ~640 muscles</li><li><strong>Smooth muscle</strong> — involuntary; non-striated; walls of hollow organs and vessels</li><li><strong>Cardiac muscle</strong> — involuntary; striated; only in heart; intercalated discs for signal conduction</li><li><strong>Sarcomere</strong> — basic contractile unit; actin (thin) + myosin (thick) filaments</li><li><strong>Neuromuscular junction (NMJ)</strong> — synapse between motor neuron and muscle fiber; ACh released</li><li><strong>Motor unit</strong> — one motor neuron + all muscle fibers it innervates</li><li><strong>Fascia</strong> — connective tissue surrounding muscles; compartments</li><li><strong>Origin</strong> — proximal/fixed attachment | <strong>Insertion</strong> — distal/moving attachment</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Movement</strong> — locomotion, breathing, swallowing, eye movement</li><li><strong>Posture</strong> — constant low-level contraction maintains body position</li><li><strong>Heat production</strong> — 85% of body heat generated by skeletal muscle activity</li><li><strong>Respiration</strong> — diaphragm (phrenic nerve C3–C5) + intercostals enable ventilation</li><li><strong>Peristalsis</strong> — smooth muscle moves food and waste through GI tract</li><li><strong>Circulation</strong> — smooth muscle in vessel walls regulates blood pressure</li><li><strong>Protection</strong> — abdominal muscles protect internal organs</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Muscle Strain</div><div class="path-desc">Overstretching or tearing; grades I–III; RICE (rest, ice, compression, elevation)</div></div><div class="path-card"><div class="path-name">Rhabdomyolysis</div><div class="path-desc">Muscle breakdown → myoglobin released → renal tubule damage; ↑ CK; dark urine; aggressive IV fluids</div></div><div class="path-card"><div class="path-name">Fibromyalgia</div><div class="path-desc">Widespread musculoskeletal pain + fatigue; tender points; no structural damage; multimodal treatment</div></div><div class="path-card"><div class="path-name">Muscular Dystrophy</div><div class="path-desc">Genetic progressive muscle wasting; Duchenne most common (X-linked); cardiac/respiratory involvement</div></div><div class="path-card"><div class="path-name">Myasthenia Gravis</div><div class="path-desc">Autoimmune; ACh receptor antibodies; fatigable muscle weakness; ptosis; respiratory crisis</div></div><div class="path-card"><div class="path-name">Compartment Syndrome</div><div class="path-desc">↑ pressure in fascial compartment; ischemia; 5 P's; surgical emergency</div></div><div class="path-card"><div class="path-name">Polymyositis/Dermatomyositis</div><div class="path-desc">Autoimmune muscle inflammation; proximal weakness; skin changes (dermatomyositis); steroids</div></div><div class="path-card"><div class="path-name">Malignant Hyperthermia</div><div class="path-desc">Rare life-threatening reaction to anesthesia; hyperthermia, rigidity; dantrolene sodium</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>Creatine Kinase (CK)</strong></td><td class="lab-normal">M: 55–170 | F: 30–135 U/L</td><td class="lab-flag">↑↑ rhabdomyolysis, MI (CK-MB), muscular dystrophy</td></tr><tr><td><strong>Potassium (K+)</strong></td><td class="lab-normal">3.5–5.0 mEq/L</td><td class="lab-flag">↓ muscle weakness/cramps; ↑ cardiac dysrhythmias</td></tr><tr><td><strong>Calcium (Ca2+)</strong></td><td class="lab-normal">8.5–10.5 mg/dL</td><td class="lab-flag">↓ tetany, muscle spasms; ↑ weakness</td></tr><tr><td><strong>Magnesium (Mg2+)</strong></td><td class="lab-normal">1.5–2.5 mEq/L</td><td class="lab-flag">↓ muscle cramps, tremors; ↑ neuromuscular blockade</td></tr><tr><td><strong>Myoglobin (urine)</strong></td><td class="lab-normal">Negative</td><td class="lab-flag">+ = rhabdomyolysis; dark/tea-colored urine</td></tr><tr><td><strong>Lactate</strong></td><td class="lab-normal">0.5–2.0 mmol/L</td><td class="lab-flag">↑ anaerobic metabolism; tissue hypoperfusion</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>CK levels</strong> — elevated in muscle damage; trend over time</li><li><strong>EMG (Electromyography)</strong> — measures electrical activity of muscles; diagnoses NMJ disorders</li><li><strong>Muscle biopsy</strong> — definitive for muscular dystrophy, myositis</li><li><strong>MRI</strong> — identifies muscle inflammation, tears, compartment syndrome</li><li><strong>Nerve conduction study</strong> — distinguishes nerve vs muscle disorders</li><li><strong>Tensilon (Edrophonium) test</strong> — temporary improvement in MG confirms diagnosis</li><li><strong>Urine myoglobin</strong> — positive in rhabdomyolysis</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Muscle Relaxants (Baclofen, Cyclobenzaprine)</span><span class="med-tag">NSAIDs (pain/inflammation)</span><span class="med-tag">Corticosteroids (Prednisone — myositis)</span><span class="med-tag">Dantrolene sodium (malignant hyperthermia)</span><span class="med-tag">Pyridostigmine (Myasthenia Gravis)</span><span class="med-tag">Statins (monitor CK — can cause myopathy)</span><span class="med-tag">Electrolyte replacements (KCl, Magnesium sulfate)</span><span class="med-tag">Botulinum toxin (spasticity)</span></div>
+    <p class="med-note">Nursing consideration: statins can cause muscle pain and rhabdomyolysis — always ask patients about muscle pain and monitor CK if symptomatic.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Proper warm-up and cool-down</strong> — prevents strains and delayed onset muscle soreness</li><li><strong>Hydration</strong> — critical for muscle function; dehydration increases cramp risk</li><li><strong>Statin awareness</strong> — report unexplained muscle pain, weakness, or dark urine to provider immediately</li><li><strong>Progressive exercise after injury</strong> — return to activity gradually; listen to the body</li><li><strong>Body mechanics</strong> — lift with legs not back; use assistive devices; prevent occupational injuries</li><li><strong>Myasthenia Gravis patients</strong> — avoid heat, stress, and overexertion; recognize myasthenic crisis signs; carry medical ID</li><li><strong>Electrolyte-rich diet</strong> — bananas (K+), dairy (Ca2+), nuts/seeds (Mg2+) support muscle function</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Muscle function = patient function — immobility is one of nursing's biggest enemies</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Early ambulation is one of your most powerful nursing interventions.</strong> Within days of bed rest, muscle atrophy begins — you prevent it with scheduled mobility and ROM exercises.</div><div class="nursing-point"><strong>Electrolyte imbalances manifest in muscles first.</strong> Weakness, cramps, and tetany from K+, Ca2+, and Mg2+ abnormalities are things you assess, report, and treat.</div><div class="nursing-point"><strong>Respiratory muscles can fail.</strong> The diaphragm is a muscle — Guillain-Barré, cervical SCI, and severe hypokalemia can cause respiratory failure from muscle weakness.</div><div class="nursing-point"><strong>Rhabdomyolysis can cause acute kidney injury.</strong> Extreme exertion, crush injuries, or statins can cause massive muscle breakdown — monitor CK, urine color, and renal function.</div><div class="nursing-point"><strong>Fall prevention involves muscle assessment.</strong> Muscle strength, gait stability, and balance directly determine fall risk — your assessment drives the care plan.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>Skeletal = voluntary | Smooth = organs | Cardiac = heart only | All need Ca2+ to contract</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>ACh</strong> triggers contraction at NMJ; blocked by neuromuscular blockers</div><div class="remember-item"><strong>Sliding filament</strong>: myosin heads pull actin; needs ATP + Ca2+</div><div class="remember-item"><strong>Rhabdo triad</strong>: muscle pain + weakness + dark urine → check CK + renal function</div><div class="remember-item"><strong>Malignant hyperthermia</strong>: triggered by succinylcholine/volatile anesthetics → dantrolene STAT</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="nervous">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#f8f0ff">🧠</div>
+    <div><div class="sys-title">Nervous System</div><div class="sys-tagline">The body's command and communication center</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>CNS</strong> — brain + spinal cord; protected by meninges and CSF</li><li><strong>PNS</strong> — 12 cranial nerve pairs + 31 spinal nerve pairs</li><li><strong>Cerebrum</strong> — 4 lobes: frontal (executive/motor), parietal (sensory/spatial), temporal (hearing/memory), occipital (vision)</li><li><strong>Cerebellum</strong> — coordination, balance, fine motor control</li><li><strong>Brainstem</strong> — midbrain, pons, medulla; vital life functions (RR, HR, BP)</li><li><strong>Limbic system</strong> — emotion, motivation, memory (hippocampus, amygdala)</li><li><strong>Neuron</strong> — dendrites (receive) → cell body → axon (transmit); synapse with neurotransmitters</li><li><strong>Sympathetic (SNS)</strong> — fight or flight; T1–L2 | <strong>Parasympathetic (PNS)</strong> — rest and digest; cranial and sacral</li><li><strong>BBB</strong> — blood-brain barrier; selective; protects brain from pathogens/toxins</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Sensory input</strong> — receives info from internal and external environment</li><li><strong>Integration</strong> — processes, interprets, stores sensory data</li><li><strong>Motor output</strong> — initiates voluntary and involuntary responses</li><li><strong>Higher functions</strong> — thought, consciousness, language, memory, personality</li><li><strong>Homeostasis regulation</strong> — autonomic control of HR, BP, respirations, temperature, digestion</li><li><strong>Reflex arcs</strong> — rapid spinal responses without brain processing</li><li><strong>Endocrine coordination</strong> — hypothalamus bridges nervous and endocrine systems</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Stroke (CVA)</div><div class="path-desc">Ischemic (clot, 85%) or hemorrhagic (bleed); FAST; tPA within 4.5h for ischemic; time = brain</div></div><div class="path-card"><div class="path-name">Seizures</div><div class="path-desc">Abnormal electrical discharge; generalized (tonic-clonic) vs focal; airway/safety priority; anticonvulsants</div></div><div class="path-card"><div class="path-name">Meningitis</div><div class="path-desc">Infection of meninges; Kernig's + Brudzinski's signs; nuchal rigidity; fever; LP for diagnosis; isolation</div></div><div class="path-card"><div class="path-name">Increased ICP</div><div class="path-desc">↑ pressure in skull; Cushing's triad (HTN+bradycardia+irregular RR); HOB 30°; hyperosmolar therapy</div></div><div class="path-card"><div class="path-name">Spinal Cord Injury</div><div class="path-desc">Level determines deficit; cervical→quadriplegia; thoracic→paraplegia; neurogenic shock; autonomic dysreflexia</div></div><div class="path-card"><div class="path-name">Parkinson's Disease</div><div class="path-desc">Dopamine deficiency; TRAP (tremor, rigidity, akinesia, postural instability); levodopa/carbidopa</div></div><div class="path-card"><div class="path-name">Multiple Sclerosis</div><div class="path-desc">Demyelination; relapsing-remitting; fatigue, weakness, vision changes; disease-modifying therapies</div></div><div class="path-card"><div class="path-name">Guillain-Barré</div><div class="path-desc">Ascending paralysis; autoimmune demyelination; respiratory failure risk; IVIG or plasmapheresis</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>CSF Analysis</strong></td><td class="lab-normal">Clear; glucose 50–80; protein 15–45</td><td class="lab-flag">Cloudy + ↑ WBC = meningitis; ↑ protein = GBS</td></tr><tr><td><strong>CT Head</strong></td><td class="lab-normal">N/A — imaging</td><td class="lab-flag">Rules out hemorrhage before LP; ischemic stroke may be normal early</td></tr><tr><td><strong>Na+ (Sodium)</strong></td><td class="lab-normal">135–145 mEq/L</td><td class="lab-flag">Hyponatremia → cerebral edema, seizures; SIADH common after brain injury</td></tr><tr><td><strong>Glucose</strong></td><td class="lab-normal">70–100 mg/dL</td><td class="lab-flag">Hypoglycemia mimics stroke; always check glucose in altered LOC</td></tr><tr><td><strong>ABG (PaCO2)</strong></td><td class="lab-normal">35–45 mmHg</td><td class="lab-flag">↑ CO2 → cerebral vasodilation → ↑ ICP; hyperventilate to rapidly ↓ ICP</td></tr><tr><td><strong>Drug Levels (Phenytoin, Valproate)</strong></td><td class="lab-normal">Therapeutic varies</td><td class="lab-flag">Monitor for toxicity and subtherapeutic levels in seizure management</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>CT scan (head)</strong> — first-line; rapid; rules out hemorrhage before tPA</li><li><strong>MRI brain</strong> — detects ischemic changes earlier than CT; MS plaques; tumors</li><li><strong>Lumbar puncture (LP)</strong> — CSF analysis; meningitis, subarachnoid hemorrhage</li><li><strong>EEG</strong> — brain electrical activity; diagnoses seizure type; monitors burst suppression</li><li><strong>Cerebral angiography</strong> — gold standard for vascular abnormalities; aneurysms, AVM</li><li><strong>Nerve conduction/EMG</strong> — peripheral nerve and muscle disorders; GBS</li><li><strong>ICP monitoring</strong> — ventriculostomy or bolt; continuous pressure in critical care</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">tPA (Alteplase — ischemic stroke)</span><span class="med-tag">Mannitol (↓ ICP)</span><span class="med-tag">Levetiracetam (Keppra — seizures)</span><span class="med-tag">Phenytoin/Fosphenytoin</span><span class="med-tag">Levodopa/Carbidopa (Parkinson's)</span><span class="med-tag">Corticosteroids (cerebral edema)</span><span class="med-tag">Nimodipine (subarachnoid hemorrhage)</span><span class="med-tag">IVIG (GBS, MS)</span><span class="med-tag">Hypertonic saline (↓ ICP)</span></div>
+    <p class="med-note">Nursing consideration: tPA — strict BP parameters before/after (<185/110); monitor for bleeding; no anticoagulants for 24 hours.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Stroke prevention</strong> — control BP, diabetes, cholesterol; no smoking; atrial fibrillation management</li><li><strong>Seizure safety</strong> — never leave patient alone in bath/water; wear medical ID; avoid driving until seizure-free</li><li><strong>Medication adherence</strong> — never stop anticonvulsants abruptly; antiepileptic levels require monitoring</li><li><strong>Parkinson's fall prevention</strong> — slow position changes; assistive devices; freeze technique for shuffling</li><li><strong>Headache red flags</strong> — "worst headache of my life," sudden onset, with fever/stiff neck → ER immediately</li><li><strong>Concussion protocol</strong> — cognitive and physical rest; gradual return to activity; no same-day return to sport</li><li><strong>MS heat sensitivity</strong> — avoid hot environments; cool showers; AC in summer</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">The nervous system changes fast — and you are the one at the bedside catching it</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Neuro changes are the first sign of deterioration.</strong> A subtle LOC change, new confusion, or personality shift can signal stroke, sepsis, ICP, or medication toxicity — you catch it first.</div><div class="nursing-point"><strong>You perform neuro checks more than any other provider.</strong> GCS, pupils, motor/sensory — every shift, every hour in critical care. Your documentation is the trend data.</div><div class="nursing-point"><strong>Stroke is a time-sensitive emergency.</strong> Every minute of delay destroys ~1.9 million neurons. Your FAST recognition and rapid response directly saves lives and function.</div><div class="nursing-point"><strong>Pain is a nervous system phenomenon.</strong> Understanding pain pathways helps you assess accurately, choose interventions, and advocate for adequate management.</div><div class="nursing-point"><strong>Autonomic dysreflexia in SCI patients above T6 is a life-threatening emergency.</strong> You must recognize triggers (full bladder, pressure), symptoms (hypertensive crisis, headache), and respond immediately.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title">Brain lobes: <em>Frontal=Function/Motor | Parietal=Position/Sensory | Temporal=Tones/Hearing | Occipital=Optics/Vision</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>Cushing's Triad</strong>: ↑ BP + ↓ HR + irregular RR = ↑ ICP emergency</div><div class="remember-item"><strong>GCS</strong>: Eyes(4) + Verbal(5) + Motor(6) = 15 max; <8 = intubation threshold</div><div class="remember-item"><strong>FAST stroke</strong>: Face droop, Arm weak, Speech slurred, Time to call 911</div><div class="remember-item"><strong>Decorticate</strong>: arms curl IN (toward core) | <strong>Decerebrate</strong>: arms extend OUT</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="endocrine">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#fff8ee">⚗️</div>
+    <div><div class="sys-title">Endocrine System</div><div class="sys-tagline">Chemical messengers that regulate metabolism and homeostasis</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Hypothalamus</strong> — master regulator; releases/inhibits pituitary hormones</li><li><strong>Anterior pituitary</strong> — GH, TSH, ACTH, FSH, LH, Prolactin ("FLAT PiG")</li><li><strong>Posterior pituitary</strong> — ADH (vasopressin), Oxytocin (stored; produced in hypothalamus)</li><li><strong>Thyroid</strong> — T3 (active), T4 (storage); Calcitonin (↓ Ca2+)</li><li><strong>Parathyroid</strong> — 4 glands; PTH (↑ Ca2+ when levels low)</li><li><strong>Adrenal cortex</strong> — Cortisol (stress), Aldosterone (Na+/K+), Androgens (sex hormones)</li><li><strong>Adrenal medulla</strong> — Epinephrine 80%, Norepinephrine 20% (fight-or-flight)</li><li><strong>Pancreas (endocrine)</strong> — Beta cells→Insulin (↓ glucose); Alpha cells→Glucagon (↑ glucose)</li><li><strong>Pineal gland</strong> — Melatonin; circadian rhythm regulation</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Metabolism</strong> — thyroid hormones set metabolic rate for every cell</li><li><strong>Blood glucose homeostasis</strong> — insulin (↓) vs glucagon (↑) balance</li><li><strong>Stress response</strong> — cortisol + epinephrine mobilize energy, suppress inflammation</li><li><strong>Fluid/electrolyte balance</strong> — ADH (water), aldosterone (Na+/K+)</li><li><strong>Growth and development</strong> — GH, thyroid hormones, sex hormones</li><li><strong>Reproduction</strong> — FSH, LH, estrogen, progesterone, testosterone</li><li><strong>Calcium regulation</strong> — PTH (↑) vs calcitonin (↓); bone, kidney, GI all respond</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Type 1 Diabetes</div><div class="path-desc">Autoimmune beta cell destruction; no insulin production; ketosis-prone; insulin-dependent for life</div></div><div class="path-card"><div class="path-name">Type 2 Diabetes</div><div class="path-desc">Insulin resistance + relative deficiency; lifestyle + oral agents + insulin; most common endocrine disorder</div></div><div class="path-card"><div class="path-name">DKA</div><div class="path-desc">Type 1 emergency; ↑ glucose, ketones, metabolic acidosis; Kussmaul breathing; IV fluids + insulin drip</div></div><div class="path-card"><div class="path-name">HHS (HHNS)</div><div class="path-desc">Type 2 emergency; extreme hyperglycemia (>600); hyperosmolar; no significant ketosis; very high mortality</div></div><div class="path-card"><div class="path-name">Hypothyroidism</div><div class="path-desc">↓ T3/T4; fatigue, weight gain, bradycardia, cold intolerance, constipation, myxedema; levothyroxine</div></div><div class="path-card"><div class="path-name">Hyperthyroidism/Graves'</div><div class="path-desc">↑ T3/T4; weight loss, tachycardia, heat intolerance, exophthalmos; methimazole, radioiodine, surgery</div></div><div class="path-card"><div class="path-name">Cushing's Syndrome</div><div class="path-desc">↑ cortisol; moon face, buffalo hump, striae, HTN, hyperglycemia, osteoporosis; taper steroids carefully</div></div><div class="path-card"><div class="path-name">Addison's Disease</div><div class="path-desc">Adrenal insufficiency; hypotension, hyperkalemia, hyponatremia, bronze skin; hydrocortisone replacement</div></div><div class="path-card"><div class="path-name">SIADH</div><div class="path-desc">↑ ADH → water retention → hyponatremia; fluid restrict; treat underlying cause</div></div><div class="path-card"><div class="path-name">Diabetes Insipidus</div><div class="path-desc">↓ ADH → massive dilute urine; hypernatremia; dehydration; desmopressin</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>Fasting Glucose</strong></td><td class="lab-normal">70–100 mg/dL</td><td class="lab-flag">100–125 prediabetes; ≥126 diabetes (×2 tests)</td></tr><tr><td><strong>HbA1c</strong></td><td class="lab-normal"><5.7% normal</td><td class="lab-flag">5.7–6.4% prediabetes; ≥6.5% diabetes; reflects 3-month average</td></tr><tr><td><strong>TSH</strong></td><td class="lab-normal">0.4–4.0 mIU/L</td><td class="lab-flag">↑ TSH = hypothyroid (thyroid failing); ↓ TSH = hyperthyroid</td></tr><tr><td><strong>Free T4</strong></td><td class="lab-normal">0.8–1.8 ng/dL</td><td class="lab-flag">↓ hypothyroid; ↑ hyperthyroid</td></tr><tr><td><strong>Cortisol (AM)</strong></td><td class="lab-normal">6–23 mcg/dL</td><td class="lab-flag">↓ Addison's; ↑ Cushing's; peaks at 8am</td></tr><tr><td><strong>Sodium (Na+)</strong></td><td class="lab-normal">135–145 mEq/L</td><td class="lab-flag">↓ SIADH/Addison's; ↑ Diabetes Insipidus</td></tr><tr><td><strong>Potassium (K+)</strong></td><td class="lab-normal">3.5–5.0 mEq/L</td><td class="lab-flag">↑ Addison's (↓ aldosterone); ↓ Cushing's (↑ aldosterone)</td></tr><tr><td><strong>Urine Specific Gravity</strong></td><td class="lab-normal">1.005–1.030</td><td class="lab-flag">↓ (<1.005) DI; ↑ (>1.030) dehydration/SIADH</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>Fasting glucose + HbA1c</strong> — diagnose and monitor diabetes</li><li><strong>Glucose tolerance test (OGTT)</strong> — gestational diabetes screening</li><li><strong>TSH + Free T4</strong> — thyroid function; TSH is the best screening test</li><li><strong>24-hour urine cortisol</strong> — Cushing's syndrome screening</li><li><strong>ACTH stimulation test</strong> — Addison's disease diagnosis</li><li><strong>Urine osmolality + specific gravity</strong> — DI vs SIADH differentiation</li><li><strong>Thyroid ultrasound</strong> — nodules, goiter assessment</li><li><strong>Radioactive iodine uptake</strong> — Graves' disease vs thyroiditis</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Insulin (Rapid/Short/Intermediate/Long-acting)</span><span class="med-tag">Metformin</span><span class="med-tag">Sulfonylureas (Glipizide)</span><span class="med-tag">GLP-1 agonists (Semaglutide/Ozempic)</span><span class="med-tag">SGLT-2 inhibitors (Empagliflozin)</span><span class="med-tag">Levothyroxine (Synthroid)</span><span class="med-tag">Methimazole/PTU (hyperthyroid)</span><span class="med-tag">Hydrocortisone/Prednisone</span><span class="med-tag">Desmopressin (DDAVP — DI)</span><span class="med-tag">Fludrocortisone (Addison's)</span></div>
+    <p class="med-note">Nursing consideration: insulin — highest-alert medication; double-check dose and type; never skip basal insulin during NPO; glucose monitoring essential.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Diabetes self-management</strong> — blood glucose monitoring frequency, target ranges, when to call provider</li><li><strong>Hypoglycemia recognition and treatment</strong> — 15-15 rule; always carry fast-acting glucose; medical ID</li><li><strong>Insulin administration</strong> — rotation of sites; proper technique; storage; never share needles</li><li><strong>Sick day management</strong> — never stop insulin when sick; check glucose more often; stay hydrated</li><li><strong>Levothyroxine</strong> — take on empty stomach 30–60 min before food; consistent timing; no calcium/iron within 4 hours</li><li><strong>Steroid taper</strong> — never stop abruptly; adrenal crisis risk; carry medical ID; stress dosing instructions</li><li><strong>DKA prevention</strong> — always take basal insulin; sick day rules; check ketones if glucose >250</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Hormones regulate everything — endocrine emergencies are life-threatening and you are first to see them</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Diabetes management is a daily nursing responsibility.</strong> Blood glucose monitoring, insulin administration, carb counting, and hypoglycemia treatment are core skills used every shift.</div><div class="nursing-point"><strong>Endocrine emergencies develop fast.</strong> DKA, HHS, thyroid storm, adrenal crisis, and severe hypoglycemia all require immediate nursing recognition and intervention — minutes matter.</div><div class="nursing-point"><strong>Stress physiology affects every hospitalized patient.</strong> Illness spikes cortisol and disrupts glucose — your diabetic patients need more frequent monitoring when acutely ill.</div><div class="nursing-point"><strong>Many common medications affect the endocrine system.</strong> Corticosteroids raise glucose; beta-blockers mask hypoglycemia signs; lithium affects thyroid — you monitor for these interactions.</div><div class="nursing-point"><strong>Patient education is critical for chronic endocrine conditions.</strong> Diabetes, hypothyroidism, and adrenal insufficiency are lifelong — your teaching directly determines their safety at home.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>Insulin = glucose IN to cells (↓ blood glucose) | Glucagon = glucose OUT of liver (↑ blood glucose)</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>PTH</strong> ↑ Ca2+ | <strong>Calcitonin</strong> ↓ Ca2+ (they oppose; PTH wins)</div><div class="remember-item"><strong>SIADH</strong>: ↑ ADH → water retained → ↓ Na+ (dilutional hyponatremia)</div><div class="remember-item"><strong>DI</strong>: ↓ ADH → water lost → ↑ Na+ (hypernatremia + dehydration)</div><div class="remember-item"><strong>Cushing's</strong>: THINK — Truncal obesity, HTN, Impaired immunity, Natremia↑, K+↓, Striae</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="cardiovascular">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#fff0f0">❤️</div>
+    <div><div class="sys-title">Cardiovascular System</div><div class="sys-tagline">Oxygen, nutrients, and waste transported through 60,000 miles of vessels</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Heart chambers</strong> — RA (receives systemic venous blood) → RV → lungs → LA → LV → body</li><li><strong>Valves (TPMA)</strong> — Tricuspid (RA→RV), Pulmonic (RV→PA), Mitral (LA→LV), Aortic (LV→Aorta)</li><li><strong>Conduction system</strong> — SA node (60–100 bpm) → AV node (40–60) → Bundle of His → Bundle branches → Purkinje (20–40)</li><li><strong>Pericardium</strong> — fibrous outer + serous inner layers; pericardial space (15–50 mL fluid)</li><li><strong>Coronary arteries</strong> — RCA (right ventricle, inferior LV), LAD (anterior LV), LCx (lateral LV)</li><li><strong>Arteries</strong> — carry blood away from heart; elastic (aorta) + muscular; high pressure</li><li><strong>Veins</strong> — carry blood toward heart; low pressure; have valves to prevent backflow</li><li><strong>Capillaries</strong> — 1-cell thick; site of gas/nutrient/waste exchange; connect arterioles to venules</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>O2 and nutrient transport</strong> — delivers to every cell; CO2 and waste removed</li><li><strong>Pulmonary circulation</strong> — right heart → pulmonary arteries → lungs → pulmonary veins → left heart</li><li><strong>Systemic circulation</strong> — left heart → aorta → body → vena cava → right heart</li><li><strong>Blood pressure maintenance</strong> — cardiac output × systemic vascular resistance</li><li><strong>Thermoregulation</strong> — cutaneous blood flow regulates heat loss</li><li><strong>Immune cell transport</strong> — WBCs, antibodies, complement circulate</li><li><strong>Hemostasis</strong> — platelets + clotting factors respond to vessel injury</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Myocardial Infarction</div><div class="path-desc">Coronary artery occlusion; STEMI vs NSTEMI; troponin ↑; 12-lead EKG; MONA: morphine, O2, nitrates, aspirin</div></div><div class="path-card"><div class="path-name">Heart Failure</div><div class="path-desc">HFrEF (systolic) vs HFpEF (diastolic); left (pulmonary edema, SOB) vs right (peripheral edema, JVD)</div></div><div class="path-card"><div class="path-name">Hypertension</div><div class="path-desc">Silent killer; systolic ≥130 or diastolic ≥80; target organ damage; lifestyle + medications</div></div><div class="path-card"><div class="path-name">Atrial Fibrillation</div><div class="path-desc">Chaotic atrial activity; no P waves; irregular; stroke risk; anticoagulation; rate/rhythm control</div></div><div class="path-card"><div class="path-name">Ventricular Fibrillation</div><div class="path-desc">Lethal dysrhythmia; no cardiac output; immediate defibrillation; CPR; ACLS</div></div><div class="path-card"><div class="path-name">Cardiogenic Shock</div><div class="path-desc">Heart fails as pump; ↓ CO, ↑ SVR; cool/clammy; vasopressors; inotropes; IABP</div></div><div class="path-card"><div class="path-name">DVT/PE</div><div class="path-desc">Virchow's triad: stasis + hypercoagulability + endothelial damage; anticoagulation; PE = life-threatening</div></div><div class="path-card"><div class="path-name">Peripheral Artery Disease</div><div class="path-desc">Atherosclerosis in peripheral arteries; claudication; 6 P's; ankle-brachial index</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>Troponin I/T</strong></td><td class="lab-normal"><0.04 ng/mL (varies)</td><td class="lab-flag">↑ MI; peaks 24h; returns normal 5–14 days; most sensitive cardiac marker</td></tr><tr><td><strong>BNP/NT-proBNP</strong></td><td class="lab-normal">BNP <100 pg/mL</td><td class="lab-flag">↑ heart failure; guides diuresis; higher = worse prognosis</td></tr><tr><td><strong>PT/INR</strong></td><td class="lab-normal">PT: 11–13 sec; INR: 0.8–1.2</td><td class="lab-flag">INR 2–3 therapeutic for AFib anticoagulation; >3 bleeding risk</td></tr><tr><td><strong>aPTT</strong></td><td class="lab-normal">25–35 seconds</td><td class="lab-flag">Monitor heparin therapy; therapeutic 60–100 sec</td></tr><tr><td><strong>Potassium (K+)</strong></td><td class="lab-normal">3.5–5.0 mEq/L</td><td class="lab-flag">Hypo/hyperkalemia both cause dysrhythmias; critical with digoxin</td></tr><tr><td><strong>Digoxin level</strong></td><td class="lab-normal">0.5–2.0 ng/mL</td><td class="lab-flag">Narrow TI; toxicity: bradycardia, visual changes, N/V; hold if <60 HR</td></tr><tr><td><strong>CK-MB</strong></td><td class="lab-normal"><5% of total CK</td><td class="lab-flag">More specific for cardiac damage than total CK; elevated 3–12h post-MI</td></tr><tr><td><strong>CBC</strong></td><td class="lab-normal">WBC 4.5–11K; Hgb M13.5/F12</td><td class="lab-flag">↓ Hgb = ↓ O2 carrying capacity; ↑ WBC = infection/inflammation</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>12-lead EKG</strong> — diagnoses MI, dysrhythmias, LVH, blocks; should be done within 10 min of chest pain</li><li><strong>Echocardiogram</strong> — cardiac structure and function; ejection fraction; wall motion abnormalities</li><li><strong>Cardiac catheterization</strong> — gold standard for coronary artery disease; can treat with PCI</li><li><strong>Troponin serial measurements</strong> — drawn on arrival, 3h, 6h; rising trend = MI</li><li><strong>Chest X-ray</strong> — cardiomegaly, pulmonary edema, pleural effusion</li><li><strong>Holter monitor / Event monitor</strong> — 24–48h EKG; catches intermittent dysrhythmias</li><li><strong>Stress test</strong> — exercise or pharmacological; assess for exercise-induced ischemia</li><li><strong>CT angiography</strong> — PE diagnosis; coronary anatomy non-invasively</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Aspirin</span><span class="med-tag">Heparin (UFH/LMWH)</span><span class="med-tag">Warfarin (Coumadin)</span><span class="med-tag">Apixaban/Rivaroxaban (DOACs)</span><span class="med-tag">Metoprolol/Carvedilol (beta-blockers)</span><span class="med-tag">Lisinopril/Losartan (RAAS)</span><span class="med-tag">Furosemide (Lasix)</span><span class="med-tag">Digoxin</span><span class="med-tag">Nitroglycerin</span><span class="med-tag">Amiodarone</span><span class="med-tag">Epinephrine (ACLS)</span><span class="med-tag">Dopamine/Dobutamine</span><span class="med-tag">Statins (Atorvastatin)</span></div>
+    <p class="med-note">Nursing consideration: nitroglycerin — always check BP before giving; hold if SBP <90; patient must be sitting or lying; do not store in plastic.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Heart-healthy diet</strong> — DASH diet; ↓ sodium (<2g/day in HF); ↓ saturated fat; ↑ fruits/vegetables</li><li><strong>Daily weight in heart failure</strong> — same time, same scale, after voiding; report >2–3 lb gain in a day</li><li><strong>Medication adherence</strong> — never stop beta-blockers or ACE inhibitors abruptly; take statins at bedtime</li><li><strong>Anticoagulation education</strong> — bleeding precautions; consistent Vit K with warfarin; INR monitoring</li><li><strong>Activity progression post-MI</strong> — cardiac rehab; gradual return; no driving until cleared</li><li><strong>Nitroglycerin instructions</strong> — sit down before taking; 1 tab q5min × 3; call 911 if not relieved</li><li><strong>Blood pressure monitoring</strong> — home BP log; target <130/80; recognize hypertensive urgency signs</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">The cardiovascular system is at the center of almost every clinical emergency you will face</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Cardiovascular assessment is performed every single shift.</strong> Heart sounds, peripheral pulses, capillary refill, edema, and BP — these are your baseline data points for every patient.</div><div class="nursing-point"><strong>Cardiac monitoring is a fundamental nursing skill.</strong> Reading EKG rhythms, identifying dangerous dysrhythmias, and initiating rapid response is expected competency.</div><div class="nursing-point"><strong>Most life-threatening emergencies are cardiovascular.</strong> MI, stroke, PE, shock, and cardiac arrest all require immediate nursing recognition and action — seconds count.</div><div class="nursing-point"><strong>Fluid management is cardiovascular management.</strong> Every IV order, every I&O measurement, every assessment for overload or deficit ties back to cardiac physiology.</div><div class="nursing-point"><strong>Cardiovascular medications are among the most dangerous.</strong> Anticoagulants, antidysrhythmics, vasopressors, and digoxin have narrow therapeutic windows — your monitoring prevents harm.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>Blood flow: Body → RA → RV → Lungs → LA → LV → Body (Right = pulmonary, Left = systemic)</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>TPMA</strong> valve order: Toilet Paper My Ass (Tricuspid→Pulmonic→Mitral→Aortic)</div><div class="remember-item"><strong>S1</strong> = "Lub" = mitral/tricuspid CLOSE | <strong>S2</strong> = "Dub" = aortic/pulmonic CLOSE</div><div class="remember-item"><strong>CO = HR × SV</strong>; SV affected by preload (volume), afterload (resistance), contractility</div><div class="remember-item"><strong>Troponin</strong> = best MI marker; rises in 3–6h; peaks 24h; stays elevated 1–2 weeks</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="lymphatic">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#eef8f4">🛡️</div>
+    <div><div class="sys-title">Lymphatic / Immune System</div><div class="sys-tagline">Fluid balance, pathogen defense, and immune surveillance</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Lymphatic vessels</strong> — parallel venous system; one-way flow; lacteals in GI absorb fat</li><li><strong>Lymph nodes</strong> — bean-shaped filters; concentrated in neck, axilla, groin, mesentery</li><li><strong>Spleen</strong> — filters blood; destroys old RBCs; immune activation; largest lymphoid organ</li><li><strong>Thymus</strong> — T-cell maturation; largest in childhood; involutes after puberty</li><li><strong>Tonsils/Peyer's patches/Appendix</strong> — MALT (mucosa-associated lymphoid tissue)</li><li><strong>T lymphocytes</strong> — cell-mediated immunity; helper (CD4+), cytotoxic (CD8+), regulatory</li><li><strong>B lymphocytes</strong> — humoral immunity; differentiate into plasma cells → antibodies</li><li><strong>NK cells</strong> — innate; kill cancer cells and virus-infected cells without prior sensitization</li><li><strong>Macrophages/Dendritic cells</strong> — phagocytosis + antigen presentation to T cells</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Fluid balance</strong> — returns ~3L/day of interstitial fluid to bloodstream</li><li><strong>Fat absorption</strong> — lacteals absorb dietary fats → chylomicrons → thoracic duct → blood</li><li><strong>Innate immunity</strong> — nonspecific, immediate: inflammation, fever, phagocytosis, NK cells</li><li><strong>Adaptive immunity</strong> — specific, delayed, memory: T cells (cell-mediated) + B cells (humoral)</li><li><strong>Antibody production</strong> — B cells produce IgG (most common), IgM (first), IgA (secretions), IgE (allergy), IgD</li><li><strong>Immune surveillance</strong> — identifies and destroys abnormal cells (cancer surveillance)</li><li><strong>Inflammatory response</strong> — redness, heat, swelling, pain = cardinal signs of inflammation</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Sepsis</div><div class="path-desc">Life-threatening organ dysfunction from infection; qSOFA or SOFA criteria; Sepsis-3 definition; 1-hour bundle</div></div><div class="path-card"><div class="path-name">HIV/AIDS</div><div class="path-desc">CD4+ T-cell destruction; immunosuppression; opportunistic infections when CD4 <200; ART therapy</div></div><div class="path-card"><div class="path-name">Lymphoma</div><div class="path-desc">Cancer of lymphocytes; Hodgkin's (Reed-Sternberg cells) vs Non-Hodgkin's; lymphadenopathy, B symptoms</div></div><div class="path-card"><div class="path-name">Autoimmune Disease</div><div class="path-desc">Immune attacks self; SLE (butterfly rash, multi-organ), RA, MS, Type 1 DM, Hashimoto's</div></div><div class="path-card"><div class="path-name">Anaphylaxis</div><div class="path-desc">Severe IgE-mediated reaction; airway compromise + cardiovascular collapse; epinephrine IM immediately</div></div><div class="path-card"><div class="path-name">Lymphedema</div><div class="path-desc">Lymph fluid accumulation from lymph vessel damage/removal; chronic swelling; infection risk</div></div><div class="path-card"><div class="path-name">Leukemia</div><div class="path-desc">Malignant WBC proliferation; AML, ALL, CML, CLL; bone marrow infiltration; pancytopenia</div></div><div class="path-card"><div class="path-name">Allergic Reactions</div><div class="path-desc">IgE-mediated histamine release; spectrum mild→anaphylaxis; antihistamines, corticosteroids, epinephrine</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>WBC with differential</strong></td><td class="lab-normal">4,500–11,000/µL</td><td class="lab-flag">↑ infection/inflammation; ↓ bone marrow suppression/immunosuppression</td></tr><tr><td><strong>ANC (Absolute Neutrophil Count)</strong></td><td class="lab-normal">1,500–8,000/µL</td><td class="lab-flag"><500 = severe neutropenia; <1,000 = neutropenic precautions</td></tr><tr><td><strong>CD4+ T-cell count</strong></td><td class="lab-normal">500–1,200 cells/µL</td><td class="lab-flag">HIV monitoring; <200 = AIDS; <200 = PCP prophylaxis needed</td></tr><tr><td><strong>CRP</strong></td><td class="lab-normal"><1.0 mg/dL</td><td class="lab-flag">Sensitive inflammatory marker; ↑ infection, autoimmune, tissue damage</td></tr><tr><td><strong>ESR</strong></td><td class="lab-normal">M <15 | F <20 mm/hr</td><td class="lab-flag">Nonspecific inflammation; ↑ infection, RA, SLE, temporal arteritis</td></tr><tr><td><strong>IgG/IgM/IgA levels</strong></td><td class="lab-normal">Varies by type</td><td class="lab-flag">↓ immunodeficiency; elevated in multiple myeloma, chronic infection</td></tr><tr><td><strong>Procalcitonin</strong></td><td class="lab-normal"><0.1 ng/mL</td><td class="lab-flag">More specific for bacterial infection than CRP; guides antibiotic therapy</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>CBC with differential</strong> — WBC count and types; ANC calculation</li><li><strong>Flow cytometry</strong> — CD4/CD8 count; lymphocyte typing; leukemia/lymphoma diagnosis</li><li><strong>Blood cultures ×2</strong> — before antibiotics in sepsis; identify organism</li><li><strong>Bone marrow biopsy</strong> — leukemia, lymphoma, aplastic anemia diagnosis</li><li><strong>Lymph node biopsy</strong> — lymphoma diagnosis; Reed-Sternberg cells in Hodgkin's</li><li><strong>ANA (antinuclear antibody)</strong> — SLE screening; positive does not confirm diagnosis</li><li><strong>HIV ELISA + Western blot</strong> — HIV diagnosis; ELISA screens, Western blot confirms</li><li><strong>Allergy testing</strong> — skin prick test; RAST (serum IgE); identifies allergens</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Antiretrovirals (ART — HIV)</span><span class="med-tag">Corticosteroids (immunosuppression)</span><span class="med-tag">Filgrastim (G-CSF — ↑ neutrophils)</span><span class="med-tag">Epinephrine (anaphylaxis)</span><span class="med-tag">Diphenhydramine (Benadryl)</span><span class="med-tag">Rituximab (B-cell lymphoma/RA)</span><span class="med-tag">IVIG (immune deficiency/autoimmune)</span><span class="med-tag">Broad-spectrum antibiotics</span><span class="med-tag">Methotrexate (autoimmune)</span><span class="med-tag">Immunosuppressants (Tacrolimus, Mycophenolate)</span></div>
+    <p class="med-note">Nursing consideration: neutropenic patients — no fresh flowers/plants; avoid raw foods; private room; report any temp >38°C (100.4°F) immediately.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Infection prevention</strong> — hand hygiene; food safety; avoid sick contacts; vaccines per schedule</li><li><strong>Immunocompromised precautions</strong> — avoid live vaccines; report fever >100.4°F immediately; food safety</li><li><strong>Anaphylaxis action plan</strong> — carry epinephrine auto-injector (EpiPen) at all times; use at first sign; call 911; wear medical ID</li><li><strong>HIV medication adherence</strong> — ART must be taken consistently; resistance develops with missed doses; U=U (undetectable = untransmittable)</li><li><strong>Lymphedema management</strong> — elevate affected limb; avoid BP cuffs/venipuncture in affected arm; compression garments; skin care</li><li><strong>Sepsis awareness</strong> — know signs: confusion, fast breathing, high/low temp, extreme pain — seek emergency care quickly</li><li><strong>Autoimmune disease management</strong> — medication adherence; sun protection (SLE); regular monitoring; avoid triggers</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Infection prevention and immune monitoring are at the core of patient safety</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>You are the first line of infection prevention.</strong> Hand hygiene, sterile technique, bundle compliance, and isolation precautions — every action you take or skip affects infection risk.</div><div class="nursing-point"><strong>Immunocompromised patients are your highest-risk patients.</strong> Chemo, HIV, transplant, and steroid patients need neutropenic precautions — you protect them from organisms harmless to healthy people.</div><div class="nursing-point"><strong>Sepsis kills and nurses catch it first.</strong> Fever, tachycardia, hypotension, altered mental status — you are at the bedside when these develop; your recognition initiates the sepsis bundle.</div><div class="nursing-point"><strong>Allergic reactions happen under your watch.</strong> You administer medications and blood products — anaphylaxis recognition and epinephrine administration are non-negotiable competencies.</div><div class="nursing-point"><strong>Lymphedema requires specialized nursing care.</strong> Post-mastectomy and post-lymph node dissection patients need limb precautions, elevation, and education to prevent progression.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>T cells = Thugs (kill directly) | B cells = Bombs (antibodies) | NK cells = Natural Killers (no prior exposure needed)</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>5 immunoglobulins</strong>: IgG (most common/memory), IgM (first response), IgA (secretions), IgE (allergy), IgD</div><div class="remember-item"><strong>Innate</strong> = fast, nonspecific, no memory | <strong>Adaptive</strong> = slow, specific, memory cells</div><div class="remember-item"><strong>ANC <500</strong> = severe neutropenia; reverse isolation; report any fever immediately</div><div class="remember-item"><strong>Anaphylaxis</strong>: Epinephrine 0.3mg IM mid-lateral thigh FIRST; then antihistamines/steroids</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="respiratory">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#f0f9f4">🫁</div>
+    <div><div class="sys-title">Respiratory System</div><div class="sys-tagline">Gas exchange — the bridge between air and blood</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Upper airway</strong> — nose, sinuses, pharynx, larynx; filters, warms, humidifies air</li><li><strong>Trachea</strong> — 10–12 cm; C-shaped cartilage rings; divides at carina (T4–T5)</li><li><strong>Right main bronchus</strong> — shorter, wider, more vertical; aspiration goes right</li><li><strong>Bronchi → Bronchioles</strong> — progressive branching; bronchioles lack cartilage; bronchospasm possible</li><li><strong>Alveoli</strong> — ~300 million; Type I pneumocytes (structure) + Type II (surfactant production)</li><li><strong>Surfactant</strong> — phospholipid; ↓ surface tension; prevents alveolar collapse on expiration</li><li><strong>Diaphragm</strong> — primary breathing muscle; phrenic nerve (C3–C4–C5); "C3, 4, 5 keep you alive"</li><li><strong>Pleura</strong> — visceral (lung surface) + parietal (chest wall); pleural space normally ~5–10 mL fluid</li><li><strong>Alveolar-capillary membrane</strong> — 0.5 µm thick; site of diffusion; O2 in, CO2 out</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Ventilation</strong> — moving air in (inspiration) and out (expiration)</li><li><strong>Gas exchange (respiration)</strong> — O2 enters blood; CO2 exits at alveolar-capillary membrane</li><li><strong>O2 transport</strong> — 98% bound to hemoglobin; 2% dissolved in plasma</li><li><strong>CO2 elimination</strong> — 70% as bicarbonate; 23% bound to hemoglobin; 7% dissolved</li><li><strong>pH regulation</strong> — CO2 + H2O ⇌ H2CO3 ⇌ H+ + HCO3- (respiratory acid-base balance)</li><li><strong>Protection</strong> — cilia + mucus trap particles; cough/sneeze reflexes</li><li><strong>Vocalization and olfaction</strong> — larynx produces sound; nasal epithelium detects smell</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Pneumonia</div><div class="path-desc">Infection of lung parenchyma; CAP vs HAP; consolidation; productive cough; fever; antibiotics + O2 + hydration</div></div><div class="path-card"><div class="path-name">COPD</div><div class="path-desc">Chronic obstruction (emphysema + chronic bronchitis); irreversible; bronchodilators; ↓ exacerbations; O2 SpO2 88–92%</div></div><div class="path-card"><div class="path-name">Asthma</div><div class="path-desc">Reversible bronchospasm; allergic triggers; wheezing; SABA rescue; ICS maintenance; peak flow monitoring</div></div><div class="path-card"><div class="path-name">Pneumothorax</div><div class="path-desc">Air in pleural space; spontaneous or traumatic; absent breath sounds; tracheal deviation (tension); chest tube</div></div><div class="path-card"><div class="path-name">Pulmonary Embolism</div><div class="path-desc">Clot in pulmonary artery; sudden SOB + plexural chest pain + hypoxia; Virchow's triad; anticoagulation</div></div><div class="path-card"><div class="path-name">ARDS</div><div class="path-desc">Diffuse alveolar damage; refractory hypoxemia; bilateral infiltrates; low tidal volumes; prone positioning</div></div><div class="path-card"><div class="path-name">Pulmonary Edema</div><div class="path-desc">Fluid in alveoli; usually cardiac; pink frothy sputum; orthopnea; diuretics; O2; sits upright</div></div><div class="path-card"><div class="path-name">Pleural Effusion</div><div class="path-desc">Fluid in pleural space; dullness on percussion; absent breath sounds; thoracentesis for diagnosis/treatment</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>SpO2</strong></td><td class="lab-normal">95–100%</td><td class="lab-flag"><95% intervention needed; COPD target 88–92%; unreliable with CO poisoning</td></tr><tr><td><strong>PaO2 (ABG)</strong></td><td class="lab-normal">80–100 mmHg</td><td class="lab-flag"><60 = respiratory failure; guides O2 therapy; ↓ altitude, shunting, V/Q mismatch</td></tr><tr><td><strong>PaCO2 (ABG)</strong></td><td class="lab-normal">35–45 mmHg</td><td class="lab-flag">↑ hypoventilation/respiratory acidosis; ↓ hyperventilation/respiratory alkalosis</td></tr><tr><td><strong>pH (ABG)</strong></td><td class="lab-normal">7.35–7.45</td><td class="lab-flag"><7.35 acidosis; >7.45 alkalosis; respiratory cause = CO2 change</td></tr><tr><td><strong>HCO3- (ABG)</strong></td><td class="lab-normal">22–26 mEq/L</td><td class="lab-flag">Metabolic component; compensation for respiratory disorder</td></tr><tr><td><strong>D-dimer</strong></td><td class="lab-normal"><0.5 mg/L (500 ng/mL)</td><td class="lab-flag">↑ PE, DVT, DIC; sensitive but not specific; if normal → rules out PE</td></tr><tr><td><strong>CBC (WBC)</strong></td><td class="lab-normal">4,500–11,000/µL</td><td class="lab-flag">↑ bacterial pneumonia; left shift = bands present = infection</td></tr><tr><td><strong>Sputum culture</strong></td><td class="lab-normal">No growth</td><td class="lab-flag">Identifies respiratory pathogen; collect before antibiotics</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>ABG (arterial blood gas)</strong> — gold standard for oxygenation, ventilation, acid-base status</li><li><strong>Pulse oximetry (SpO2)</strong> — continuous; noninvasive; may be inaccurate with poor perfusion or CO poisoning</li><li><strong>Chest X-ray</strong> — first-line; pneumonia (consolidation), edema (bat-wing), pneumothorax, effusion</li><li><strong>CT chest (CTPA)</strong> — PE diagnosis (gold standard); emphysema; interstitial lung disease</li><li><strong>PFTs (Pulmonary Function Tests)</strong> — spirometry; FEV1/FVC ratio; obstructive vs restrictive pattern</li><li><strong>Bronchoscopy</strong> — visualize airways; BAL; biopsy; foreign body removal</li><li><strong>V/Q scan</strong> — ventilation-perfusion mismatch; PE diagnosis when CT contraindicated</li><li><strong>Peak flow meter</strong> — asthma monitoring; personal best; green/yellow/red zones</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Albuterol (SABA — rescue inhaler)</span><span class="med-tag">Ipratropium (SAMA — COPD)</span><span class="med-tag">Fluticasone (ICS — asthma/COPD)</span><span class="med-tag">Salmeterol (LABA)</span><span class="med-tag">Azithromycin/Amoxicillin (pneumonia)</span><span class="med-tag">Furosemide (pulmonary edema)</span><span class="med-tag">Heparin/Enoxaparin (PE/DVT)</span><span class="med-tag">N-acetylcysteine (mucolytic)</span><span class="med-tag">Methylprednisolone (acute asthma/COPD exacerbation)</span><span class="med-tag">Surfactant (NICU/ARDS)</span></div>
+    <p class="med-note">Nursing consideration: inhalers — teach proper technique (MDI vs DPI); spacer use; rinse mouth after ICS to prevent thrush; SABA = rescue, not daily maintenance.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Inhaler technique</strong> — SABA (rescue) vs ICS (controller); proper MDI technique; rinse mouth after ICS</li><li><strong>COPD</strong> — smoking cessation is #1; pursed-lip breathing; energy conservation; exacerbation warning signs</li><li><strong>Asthma action plan</strong> — green/yellow/red zones; identify triggers; when to go to ER</li><li><strong>O2 therapy at home</strong> — never smoke near O2; do not adjust flow without provider guidance; fire safety</li><li><strong>Deep breathing and coughing</strong> — post-surgical; incentive spirometry; q1–2h while awake; pillow splinting</li><li><strong>PE prevention</strong> — early ambulation; leg exercises; compression stockings; stay hydrated on long trips</li><li><strong>Report immediately</strong> — sudden severe SOB, chest pain, coughing blood, lips turning blue</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Breathing is life — respiratory failure can occur in minutes and you are the first responder</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Respiratory assessment is your most time-sensitive assessment.</strong> Rate, depth, rhythm, effort, SpO2, and breath sounds — abnormalities here require immediate action.</div><div class="nursing-point"><strong>Airway is always your first priority in any emergency.</strong> No matter what else is wrong, airway comes before breathing before circulation — you manage it at the bedside.</div><div class="nursing-point"><strong>O2 therapy requires clinical judgment.</strong> Too little causes hypoxia; too much in COPD patients suppresses respiratory drive. You titrate based on the patient's specific physiology.</div><div class="nursing-point"><strong>Positioning dramatically affects respiratory function.</strong> HOB elevation, prone positioning in ARDS, and proper positioning post-procedure are nursing interventions that improve oxygenation.</div><div class="nursing-point"><strong>Acid-base balance is largely a respiratory function.</strong> Interpreting ABGs and understanding respiratory compensation for metabolic disorders is an advanced and expected nursing competency.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>ROME: Respiratory Opposite, Metabolic Equal — for ABG interpretation direction</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>Respiratory acidosis</strong>: ↑ CO2 → ↓ pH (hypoventilation: COPD, overdose, neuromuscular)</div><div class="remember-item"><strong>Respiratory alkalosis</strong>: ↓ CO2 → ↑ pH (hyperventilation: anxiety, pain, PE, early sepsis)</div><div class="remember-item"><strong>Right bronchus</strong>: wider + more vertical = aspirated objects/ETT misplacement goes right</div><div class="remember-item"><strong>C3, 4, 5</strong> — phrenic nerve origin; "keep the diaphragm alive"</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="digestive">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#fff8ee">🫀</div>
+    <div><div class="sys-title">Digestive System</div><div class="sys-tagline">Breaking down food into fuel the body can actually use</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Mouth</strong> — mechanical digestion (teeth); chemical: salivary amylase (starch), lingual lipase (fat)</li><li><strong>Esophagus</strong> — 25 cm; peristalsis; UES and LES (prevents reflux)</li><li><strong>Stomach</strong> — stores 1.5L; HCl (pH 1.5–3.5) + pepsin (protein); churns → chyme</li><li><strong>Small intestine</strong> — duodenum (digestion), jejunum + ileum (absorption); villi + microvilli = brush border</li><li><strong>Large intestine</strong> — cecum, ascending, transverse, descending, sigmoid colon, rectum; water + electrolyte absorption</li><li><strong>Liver</strong> — largest gland; bile production; detox; glucose storage; clotting factors; albumin</li><li><strong>Gallbladder</strong> — concentrates and stores bile; contracts when fat enters duodenum (CCK)</li><li><strong>Pancreas (exocrine)</strong> — acinar cells secrete amylase, lipase, proteases into duodenum</li><li><strong>Accessory structures</strong> — teeth, tongue, salivary glands</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Ingestion</strong> — taking in food</li><li><strong>Mechanical digestion</strong> — chewing, churning, segmentation</li><li><strong>Chemical digestion</strong> — enzymes break down macronutrients</li><li><strong>Absorption</strong> — nutrients enter blood via intestinal villi; B12 needs intrinsic factor</li><li><strong>Elimination</strong> — waste compacted and expelled as feces</li><li><strong>Detoxification</strong> — liver processes drugs, alcohol, hormones, toxins</li><li><strong>Protein synthesis</strong> — liver makes albumin, clotting factors (I, II, V, VII, IX, X, XI)</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">GERD</div><div class="path-desc">LES dysfunction → reflux; heartburn; Barrett's esophagus risk; HOB 30°, no food 3h before bed; PPIs</div></div><div class="path-card"><div class="path-name">Peptic Ulcer Disease</div><div class="path-desc">H. pylori (70%) + NSAIDs; gastric (pain worsens with food) vs duodenal (pain relieved by food); PPIs, antibiotics</div></div><div class="path-card"><div class="path-name">GI Bleed</div><div class="path-desc">Upper (hematemesis, melena) vs lower (hematochezia); hemoglobin monitoring; IV access; NPO; endoscopy</div></div><div class="path-card"><div class="path-name">Cirrhosis</div><div class="path-desc">End-stage liver fibrosis; ascites, varices, hepatic encephalopathy, coagulopathy; low Na diet; diuretics</div></div><div class="path-card"><div class="path-name">Pancreatitis</div><div class="path-desc">Gallstones or alcohol; lipase ↑ ×3; severe epigastric pain; NPO; IV fluids; pain control; ranson's criteria</div></div><div class="path-card"><div class="path-name">Appendicitis</div><div class="path-desc">RLQ pain; McBurney's point; rebound tenderness; WBC ↑; NPO; emergency appendectomy</div></div><div class="path-card"><div class="path-name">Bowel Obstruction</div><div class="path-desc">Small (adhesions, hernia) vs large (cancer, volvulus); absent bowel sounds; no flatus; NGT decompression</div></div><div class="path-card"><div class="path-name">IBD</div><div class="path-desc">Crohn's (any GI segment, transmural) vs UC (colon, mucosal); flares; corticosteroids, biologics, surgery</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>Lipase</strong></td><td class="lab-normal"><60 U/L</td><td class="lab-flag">↑ pancreatitis; more specific than amylase; stays elevated longer</td></tr><tr><td><strong>Amylase</strong></td><td class="lab-normal"><115 U/L</td><td class="lab-flag">↑ pancreatitis, salivary gland disease; less specific than lipase</td></tr><tr><td><strong>ALT/AST</strong></td><td class="lab-normal">ALT 7–56 | AST 10–40 U/L</td><td class="lab-flag">↑ liver damage; ALT more liver-specific; ratio helps distinguish cause</td></tr><tr><td><strong>Bilirubin (total)</strong></td><td class="lab-normal">0.1–1.2 mg/dL</td><td class="lab-flag">↑ jaundice; direct (obstructive) vs indirect (hemolytic)</td></tr><tr><td><strong>Albumin</strong></td><td class="lab-normal">3.5–5.0 g/dL</td><td class="lab-flag">↓ malnutrition, liver disease, chronic illness; affects drug binding</td></tr><tr><td><strong>PT/INR</strong></td><td class="lab-normal">INR 0.8–1.2</td><td class="lab-flag">↑ liver disease (can't make clotting factors); guides FFP transfusion</td></tr><tr><td><strong>Hemoccult/Fecal occult blood</strong></td><td class="lab-normal">Negative</td><td class="lab-flag">Positive = blood in stool; colorectal cancer screening; upper GI bleed</td></tr><tr><td><strong>H. pylori (stool antigen/breath)</strong></td><td class="lab-normal">Negative</td><td class="lab-flag">+ = treatment with triple therapy (PPI + 2 antibiotics)</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>Upper endoscopy (EGD)</strong> — visualize esophagus, stomach, duodenum; biopsy; treat varices/bleeding</li><li><strong>Colonoscopy</strong> — colon visualization; polyp removal; colorectal cancer screening</li><li><strong>CT abdomen/pelvis</strong> — appendicitis, bowel obstruction, masses, abscess</li><li><strong>Abdominal X-ray (KUB)</strong> — bowel gas pattern; obstruction; free air (perforation)</li><li><strong>Liver biopsy</strong> — definitive for cirrhosis, hepatitis staging, NASH</li><li><strong>ERCP</strong> — common bile duct; gallstone removal; pancreatic duct evaluation</li><li><strong>Ultrasound (abdomen)</strong> — gallstones (first-line), liver disease, ascites, appendix</li><li><strong>H. pylori testing</strong> — stool antigen, urea breath test, endoscopic biopsy</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">PPIs (Omeprazole, Pantoprazole)</span><span class="med-tag">H2 blockers (Famotidine/Pepcid)</span><span class="med-tag">Ondansetron/Zofran (antiemetic)</span><span class="med-tag">Metoclopramide (promotility)</span><span class="med-tag">Lactulose (constipation/hepatic encephalopathy)</span><span class="med-tag">Mesalamine (IBD)</span><span class="med-tag">Corticosteroids (IBD flares)</span><span class="med-tag">Octreotide (GI bleeding/varices)</span><span class="med-tag">Rifaximin (hepatic encephalopathy)</span><span class="med-tag">Prokinetics</span></div>
+    <p class="med-note">Nursing consideration: lactulose in hepatic encephalopathy — goal is 2–4 soft stools/day to eliminate ammonia; titrate dose; monitor for diarrhea and electrolyte loss.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>GI auscultation first!</strong> — Inspect → Auscultate → Percuss → Palpate (teach patients this won't hurt)</li><li><strong>GERD lifestyle</strong> — HOB elevation 6–8 inches; avoid trigger foods; no eating 3h before bed; weight loss</li><li><strong>H. pylori treatment</strong> — complete all antibiotics; avoid NSAIDs and alcohol; PPI for symptom relief</li><li><strong>Cirrhosis diet</strong> — low sodium (<2g/day); adequate protein (unless encephalopathy); no alcohol ever</li><li><strong>Ostomy education</strong> — stoma assessment (should be pink/moist); pouch emptying technique; skin care; normal output expectations</li><li><strong>Colorectal cancer screening</strong> — colonoscopy q10y starting age 45; fecal occult testing annually; family history may require earlier</li><li><strong>Pancreatitis recovery</strong> — no alcohol; low-fat diet; small frequent meals; return of hunger = positive sign</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Nutrition, elimination, and GI assessment are fundamental daily nursing practice</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Bowel assessment is done every shift.</strong> Bowel sounds, abdominal appearance, last bowel movement, and distension are part of your routine assessment on every patient.</div><div class="nursing-point"><strong>GI auscultation order is different — and nurses get it wrong.</strong> Inspect → Auscultate → Percuss → Palpate (auscultate before palpation to avoid altering bowel sounds).</div><div class="nursing-point"><strong>Nutrition directly affects healing and recovery.</strong> You assess nutritional status, manage NG tubes and enteral feeds, and collaborate with dietitians every day.</div><div class="nursing-point"><strong>Liver function affects every medication you give.</strong> Impaired hepatic function changes drug metabolism, half-life, and toxicity risk — you monitor for accumulation and toxicity.</div><div class="nursing-point"><strong>GI bleeding is a common emergency.</strong> Upper GI bleed = dark/tarry stool or hematemesis; lower GI = bright red blood per rectum — you recognize, report, and initiate resuscitation.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>GI assessment: Inspect → Auscultate FIRST → Percuss → Palpate (NOT like other exams!)</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>Enzymes by location</strong>: Amylase=carbs | Pepsin=protein | Lipase=fat</div><div class="remember-item"><strong>Duodenum</strong> = digestion | <strong>Jejunum/Ileum</strong> = absorption</div><div class="remember-item"><strong>Liver makes</strong>: bile, albumin, clotting factors I/II/V/VII/IX/X/XI</div><div class="remember-item"><strong>Melena</strong> = black tarry stool = upper GI bleed | <strong>Hematochezia</strong> = bright red = lower GI</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="urinary">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#eef4ff">💧</div>
+    <div><div class="sys-title">Urinary System</div><div class="sys-tagline">The body's filtration plant — waste out, balance maintained</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Kidneys</strong> — retroperitoneal; right lower than left (liver); 12 cm × 6 cm; ~150g each</li><li><strong>Nephron</strong> — functional unit; ~1 million per kidney; filtration + reabsorption + secretion</li><li><strong>Glomerulus</strong> — capillary knot inside Bowman's capsule; filtration; GFR ~125 mL/min</li><li><strong>Proximal convoluted tubule (PCT)</strong> — reabsorbs 65% of filtrate; glucose, Na+, HCO3-</li><li><strong>Loop of Henle</strong> — descending (water permeable), ascending (impermeable); concentration gradient</li><li><strong>Distal convoluted tubule (DCT)</strong> — aldosterone acts here; fine-tune Na+/K+ exchange</li><li><strong>Collecting duct</strong> — ADH acts here; final water reabsorption; urine concentration</li><li><strong>Ureters, bladder (350–500 mL capacity), urethra</strong> — transport and storage</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Filtration</strong> — 180L filtered daily; 99% reabsorbed → only ~1.5L excreted</li><li><strong>Waste excretion</strong> — urea (protein breakdown), creatinine (muscle), uric acid, drugs</li><li><strong>Fluid balance</strong> — adjusts water excretion based on ADH signaling</li><li><strong>Electrolyte regulation</strong> — Na+, K+, Ca2+, Mg2+, phosphorus levels maintained</li><li><strong>Acid-base balance</strong> — excretes H+ ions; reabsorbs HCO3-; metabolic compensation</li><li><strong>Hormone production</strong> — erythropoietin (RBC production), renin (BP), calcitriol (Vit D activation)</li><li><strong>Blood pressure regulation</strong> — RAAS; water/sodium volume control</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">AKI (Acute Kidney Injury)</div><div class="path-desc">Sudden ↓ kidney function; prerenal (↓ flow), intrarenal (damage), postrenal (obstruction); creatinine ↑; oligo/anuria</div></div><div class="path-card"><div class="path-name">CKD (Chronic Kidney Disease)</div><div class="path-desc">GFR <60 for >3 months; staged 1–5; GFR <15 = ESRD; dialysis or transplant; many drug dose adjustments</div></div><div class="path-card"><div class="path-name">UTI</div><div class="path-desc">E. coli most common; dysuria, frequency, urgency; UA with nitrites/leukocytes; culture + antibiotics; CAUTI risk</div></div><div class="path-card"><div class="path-name">Pyelonephritis</div><div class="path-desc">Upper UTI; kidney infection; flank pain + fever + CVA tenderness; IV antibiotics; hospitalization often needed</div></div><div class="path-card"><div class="path-name">Nephrotic Syndrome</div><div class="path-desc">↑ protein in urine (>3.5g/day); edema, hypoalbuminemia, hyperlipidemia; steroids; albumin</div></div><div class="path-card"><div class="path-name">Kidney Stones (Nephrolithiasis)</div><div class="path-desc">Calcium oxalate most common; flank pain + hematuria + N/V; IVF + pain control; strain urine; lithotripsy</div></div><div class="path-card"><div class="path-name">Benign Prostatic Hyperplasia</div><div class="path-desc">Urethral compression; hesitancy, weak stream, retention; Foley if retention; alpha-blockers; TURP</div></div><div class="path-card"><div class="path-name">Glomerulonephritis</div><div class="path-desc">Inflammation of glomeruli; post-strep, autoimmune; hematuria, proteinuria, HTN, edema; immunosuppression</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>Creatinine</strong></td><td class="lab-normal">M: 0.7–1.3 | F: 0.5–1.1 mg/dL</td><td class="lab-flag">Best indicator of renal function; ↑ GFR ↓; doubles = GFR halved</td></tr><tr><td><strong>BUN (Blood Urea Nitrogen)</strong></td><td class="lab-normal">7–25 mg/dL</td><td class="lab-flag">↑ renal failure, dehydration, ↑ protein intake; BUN:Cr ratio helps classify AKI</td></tr><tr><td><strong>GFR (eGFR)</strong></td><td class="lab-normal">>90 mL/min normal</td><td class="lab-flag"><60 = CKD; <15 = ESRD; calculated from creatinine, age, sex, race</td></tr><tr><td><strong>Potassium (K+)</strong></td><td class="lab-normal">3.5–5.0 mEq/L</td><td class="lab-flag">↑ in CKD/AKI (can't excrete); hyperkalemia = cardiac emergency</td></tr><tr><td><strong>Urinalysis</strong></td><td class="lab-normal">Clear; pH 4.5–8; SG 1.005–1.030</td><td class="lab-flag">Protein, blood, nitrites, leukocytes, casts; SG reflects concentration</td></tr><tr><td><strong>Urine culture</strong></td><td class="lab-normal"><100,000 CFU/mL = negative</td><td class="lab-flag">>100,000 CFU/mL = UTI; identifies organism and sensitivities</td></tr><tr><td><strong>Urine output</strong></td><td class="lab-normal">≥0.5 mL/kg/hr</td><td class="lab-flag"><0.5 mL/kg/hr = oliguria; <30 mL/hr = concern; anuria = <100 mL/24h</td></tr><tr><td><strong>Phosphorus</strong></td><td class="lab-normal">2.5–4.5 mg/dL</td><td class="lab-flag">↑ CKD (can't excrete); binds calcium → ↓ Ca2+ → bone disease</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>Urinalysis (UA)</strong> — first-line; dipstick + microscopy; identifies infection, proteinuria, casts</li><li><strong>Urine culture and sensitivity</strong> — identifies organism; guides antibiotic choice</li><li><strong>Basic Metabolic Panel (BMP)</strong> — creatinine, BUN, electrolytes; kidney function monitoring</li><li><strong>24-hour urine collection</strong> — protein quantification; creatinine clearance calculation</li><li><strong>Renal ultrasound</strong> — kidney size, obstruction, stones, cysts; no radiation</li><li><strong>CT urography</strong> — kidney stones (gold standard); masses; obstruction</li><li><strong>Kidney biopsy</strong> — definitive for glomerulonephritis, nephrotic syndrome staging</li><li><strong>Cystoscopy</strong> — bladder visualization; tumors, stones, obstruction</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Furosemide (Lasix — diuretic)</span><span class="med-tag">Spironolactone (K+-sparing)</span><span class="med-tag">Trimethoprim-Sulfamethoxazole (UTI)</span><span class="med-tag">Ciprofloxacin (UTI/pyelonephritis)</span><span class="med-tag">Tamsulosin (BPH — alpha-blocker)</span><span class="med-tag">Sodium bicarbonate (metabolic acidosis in CKD)</span><span class="med-tag">Calcium acetate (phosphate binder)</span><span class="med-tag">Erythropoietin (EPO — anemia of CKD)</span><span class="med-tag">ACE inhibitors/ARBs (proteinuria/HTN in CKD)</span><span class="med-tag">Kayexalate/Patiromer (hyperkalemia)</span></div>
+    <p class="med-note">Nursing consideration: diuretics — monitor K+ (furosemide wastes K+; spironolactone retains K+); I&O; daily weight; BMP before/after.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Hydration</strong> — 2–3L water/day unless restricted; clear to pale yellow urine = well hydrated</li><li><strong>UTI prevention</strong> — wipe front to back; void after intercourse; adequate fluid intake; avoid holding urine</li><li><strong>Catheter care</strong> — keep bag below bladder; secure tubing; perineal hygiene; report cloudiness/odor/reduced output</li><li><strong>CKD diet</strong> — ↓ sodium, potassium, phosphorus; protein per dietitian; fluid restriction if ordered</li><li><strong>Kidney stone prevention</strong> — increase fluid intake (goal 2–3L/day); dietary changes per stone type; strain urine</li><li><strong>Medication awareness</strong> — NSAIDs, contrast dye, and aminoglycosides are nephrotoxic — report if taking</li><li><strong>BPH</strong> — report urinary retention; avoid anticholinergics; void regularly; report signs of infection</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Fluid balance, kidney function, and catheter care are central to daily nursing practice</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Intake and output monitoring is a nursing responsibility.</strong> You measure, document, and respond to fluid imbalances — dehydration and overload both cause serious complications.</div><div class="nursing-point"><strong>CAUTIs are largely preventable and nurses determine outcomes.</strong> Your sterile insertion technique, daily catheter care, and early removal decisions directly reduce infection rates.</div><div class="nursing-point"><strong>Kidney function determines drug dosing for almost every medication.</strong> Understanding GFR and creatinine clearance helps you recognize dangerous orders and prevent nephrotoxicity.</div><div class="nursing-point"><strong>Urine is a diagnostic window.</strong> Color, clarity, output, specific gravity, and odor all provide clinical data — your observation and reporting drives workup.</div><div class="nursing-point"><strong>AKI is often preventable.</strong> Adequate hydration, avoiding nephrotoxic drugs, monitoring urine output, and early sepsis recognition are nursing interventions that protect kidney function.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>Normal urine output: ≥0.5 mL/kg/hr | <0.5 = oliguria | <100 mL/24h = anuria</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>EPO</strong> made by kidneys → stimulates RBC production; ↓ in CKD → anemia</div><div class="remember-item"><strong>ADH</strong> acts on collecting duct → ↑ water reabsorption → concentrated urine</div><div class="remember-item"><strong>Aldosterone</strong> acts on DCT → ↑ Na+ retention → ↑ K+ excretion</div><div class="remember-item"><strong>BUN:Creatinine ratio</strong>: >20:1 = prerenal AKI (dehydration); ~10:1 = intrarenal</div></div>
+  </div>
+</section>
+
+<section class="system-section" id="reproductive">
+  <div class="sys-header">
+    <div class="sys-icon" style="background:#f8f0ff">🌸</div>
+    <div><div class="sys-title">Reproductive System</div><div class="sys-tagline">Continuation of the species — hormones, pregnancy, and complex care</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block structures">
+      <div class="block-header"><span class="block-icon">🏗️</span><span class="block-title">Key Structures</span></div>
+      <ul class="item-list"><li><strong>Female — ovaries</strong> — produce eggs; estrogen + progesterone production; follicles develop monthly</li><li><strong>Fallopian tubes</strong> — site of fertilization; cilia sweep egg toward uterus; ectopic pregnancy risk</li><li><strong>Uterus</strong> — endometrium (lining), myometrium (muscle), perimetrium (outer); grows 1cm/week in pregnancy</li><li><strong>Cervix</strong> — lower uterus; dilates in labor; Pap smear site; mucus plug in pregnancy</li><li><strong>Male — testes</strong> — produce sperm (spermatogenesis) + testosterone; in scrotum (2°C cooler than body)</li><li><strong>Epididymis</strong> — sperm maturation and storage; site of sperm motility development</li><li><strong>Vas deferens</strong> — sperm transport from epididymis to ejaculatory duct</li><li><strong>Prostate gland</strong> — secretes seminal fluid; surrounds urethra; enlarges with age (BPH)</li><li><strong>Placenta</strong> — gas/nutrient/waste exchange; produces hCG, estrogen, progesterone, HPL</li></ul>
+    </div>
+    <div class="block functions">
+      <div class="block-header"><span class="block-icon">⚙️</span><span class="block-title">Function Summary</span></div>
+      <ul class="item-list"><li><strong>Gamete production</strong> — oogenesis (eggs) in females; spermatogenesis (sperm) in males</li><li><strong>Hormone production</strong> — estrogen, progesterone, testosterone, hCG, inhibin</li><li><strong>Fertilization</strong> — sperm + egg → zygote; occurs in ampulla of fallopian tube</li><li><strong>Implantation</strong> — blastocyst embeds in endometrium; hCG produced → positive pregnancy test</li><li><strong>Gestation</strong> — 3 trimesters; 40 weeks (280 days) from LMP</li><li><strong>Parturition (labor)</strong> — oxytocin + prostaglandins drive uterine contractions; 3 stages</li><li><strong>Lactation</strong> — prolactin (milk production) + oxytocin (let-down reflex)</li><li><strong>Menstrual cycle</strong> — ~28 days; follicular phase → ovulation (day 14) → luteal phase</li></ul>
+    </div>
+  </div>
+
+  <div class="block pathology">
+    <div class="block-header"><span class="block-icon">🔬</span><span class="block-title">Common Pathologies</span></div>
+    <div class="path-grid"><div class="path-card"><div class="path-name">Ectopic Pregnancy</div><div class="path-desc">Implantation outside uterus (usually tube); hCG ↑ + pain + no IUP on US; rupture = hemorrhage; methotrexate or surgery</div></div><div class="path-card"><div class="path-name">Preeclampsia</div><div class="path-desc">HTN + proteinuria after 20 weeks; severe features: BP ≥160/110; MgSO4 for seizure prevention; delivery is cure</div></div><div class="path-card"><div class="path-name">Eclampsia</div><div class="path-desc">Seizures in preeclampsia/postpartum; MgSO4; side rails up; O2; protect airway; emergency delivery</div></div><div class="path-card"><div class="path-name">Postpartum Hemorrhage</div><div class="path-desc">>500 mL vaginal or >1000 mL C-section blood loss; uterine atony most common; HAEMOSTASIS mnemonic</div></div><div class="path-card"><div class="path-name">Placenta Previa</div><div class="path-desc">Placenta covers cervical os; painless bright red bleeding; NO vaginal exams; C-section delivery</div></div><div class="path-card"><div class="path-name">Gestational Diabetes</div><div class="path-desc">Glucose intolerance in pregnancy; OGTT screening at 24–28 weeks; diet + insulin; macrosomia risk</div></div><div class="path-card"><div class="path-name">Polycystic Ovary Syndrome</div><div class="path-desc">Androgen excess + irregular cycles + polycystic ovaries; metabolic syndrome risk; metformin, OCPs</div></div><div class="path-card"><div class="path-name">Prostate Cancer</div><div class="path-desc">Most common male cancer; PSA ↑; digital rectal exam; Gleason score; watchful waiting to radical prostatectomy</div></div><div class="path-card"><div class="path-name">Cervical Cancer</div><div class="path-desc">HPV (strains 16, 18); Pap + HPV co-test; LEEP, cone biopsy, hysterectomy depending on stage; vaccine prevention</div></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="block labs">
+      <div class="block-header"><span class="block-icon">🧪</span><span class="block-title">Key Lab Values</span></div>
+      <table class="lab-table">
+        <thead><tr><th>Lab</th><th>Normal Range</th><th>Clinical Significance</th></tr></thead>
+        <tbody><tr><td><strong>hCG (serum)</strong></td><td class="lab-normal">Non-pregnant: <5 mIU/mL</td><td class="lab-flag">Doubles q48–72h in early pregnancy; plateaus/↓ in ectopic; basis of pregnancy test</td></tr><tr><td><strong>Pap smear + HPV co-test</strong></td><td class="lab-normal">No abnormal cells / HPV negative</td><td class="lab-flag">Cervical cancer screening; q3y Pap alone or q5y co-test ages 30–65</td></tr><tr><td><strong>PSA (Prostate-specific antigen)</strong></td><td class="lab-normal"><4 ng/mL (age-adjusted)</td><td class="lab-flag">↑ prostate cancer, BPH, prostatitis; screening controversial after 50</td></tr><tr><td><strong>Glucose (GDM screen)</strong></td><td class="lab-normal">1-hour OGTT <130–140 mg/dL</td><td class="lab-flag">>threshold → 3-hour OGTT; GDM diagnosed if 2 abnormal values</td></tr><tr><td><strong>Group B Strep (GBS)</strong></td><td class="lab-normal">Negative</td><td class="lab-flag">Vaginal-rectal swab 36–37 weeks; + = IV penicillin during labor to prevent neonatal infection</td></tr><tr><td><strong>Estrogen/Progesterone</strong></td><td class="lab-normal">Varies by phase/pregnancy</td><td class="lab-flag">↓ postmenopausal; monitoring in fertility treatment; progesterone = viable pregnancy</td></tr><tr><td><strong>Testosterone (male)</strong></td><td class="lab-normal">270–1070 ng/dL</td><td class="lab-flag">↓ hypogonadism, Klinefelter's; ↑ PCOS in women</td></tr><tr><td><strong>Fetal heart rate (non-lab)</strong></td><td class="lab-normal">110–160 bpm</td><td class="lab-flag">Reassuring variability; late decelerations = uteroplacental insufficiency</td></tr></tbody>
+      </table>
+    </div>
+    <div class="block diagnostics">
+      <div class="block-header"><span class="block-icon">📋</span><span class="block-title">Diagnostic Tests</span></div>
+      <ul class="item-list"><li><strong>Obstetric ultrasound</strong> — fetal viability, dating, anatomy, placenta, fluid; transvaginal for early pregnancy</li><li><strong>Fetal monitoring (EFM)</strong> — continuous or intermittent; FHR + uterine contractions; interpret patterns</li><li><strong>Pap smear + HPV co-test</strong> — cervical cancer screening; Bethesda system for results</li><li><strong>Colposcopy/biopsy</strong> — abnormal Pap follow-up; cervical biopsy for histologic diagnosis</li><li><strong>Semen analysis</strong> — male infertility evaluation; sperm count, motility, morphology</li><li><strong>BRCA testing</strong> — genetic breast/ovarian cancer risk; counseling before testing</li><li><strong>Prostate biopsy</strong> — elevated PSA; Gleason score for cancer grading</li><li><strong>Hysteroscopy/laparoscopy</strong> — uterine/pelvic pathology; endometriosis diagnosis</li></ul>
+    </div>
+  </div>
+
+  <div class="block meds">
+    <div class="block-header"><span class="block-icon">💊</span><span class="block-title">Common Medications</span></div>
+    <div class="med-grid"><span class="med-tag">Oxytocin (Pitocin — labor induction/PPH)</span><span class="med-tag">Magnesium Sulfate (preeclampsia seizure prevention)</span><span class="med-tag">Betamethasone (fetal lung maturity)</span><span class="med-tag">Misoprostol/Carboprost (PPH)</span><span class="med-tag">Progesterone (prevent preterm labor)</span><span class="med-tag">Methotrexate (ectopic pregnancy)</span><span class="med-tag">Oral contraceptives</span><span class="med-tag">Metformin (PCOS/GDM)</span><span class="med-tag">Testosterone (hypogonadism)</span><span class="med-tag">Tamoxifen (breast cancer)</span></div>
+    <p class="med-note">Nursing consideration: magnesium sulfate — monitor for toxicity: loss of DTRs (first sign), respiratory depression (<12/min), urine output (<30 mL/hr); antidote = calcium gluconate at bedside.</p>
+  </div>
+
+  <div class="block education">
+    <div class="block-header"><span class="block-icon">📚</span><span class="block-title">Patient Education Points</span></div>
+    <ul class="item-list"><li><strong>Prenatal care</strong> — early and regular; folic acid 400–800 mcg before conception and in first trimester; avoid alcohol/smoking</li><li><strong>Fetal movement counting</strong> — kick counts in third trimester; >10 movements in 2 hours; report decreased movement</li><li><strong>Preeclampsia warning signs</strong> — severe headache, visual changes, RUQ pain, sudden swelling; go to ER immediately</li><li><strong>Postpartum education</strong> — uterine involution; lochia assessment; newborn feeding; postpartum depression screening</li><li><strong>HPV vaccine</strong> — recommended ages 9–26; prevents 90% of cervical cancers; give before sexual debut ideally</li><li><strong>Testicular self-exam</strong> — monthly; shower; know normal; report any painless lump immediately</li><li><strong>Contraception counseling</strong> — effectiveness, risks, benefits, and correct use of each method; respect autonomy in decision-making</li></ul>
+  </div>
+
+  <div class="nursing-importance">
+    <div class="nursing-icon">🩺</div>
+    <div>
+      <div class="nursing-label">Why This Matters as a Nurse</div>
+      <div class="nursing-title">Reproductive health spans obstetrics, oncology, urology, and primary care — all requiring sensitive, knowledgeable nursing</div>
+      <div class="nursing-points"><div class="nursing-point"><strong>Maternal-newborn nursing is an entire specialty requiring deep A&P knowledge.</strong> Labor assessment, fetal monitoring, postpartum care, and neonatal assessment all depend on reproductive physiology.</div><div class="nursing-point"><strong>Obstetric emergencies are fast, fatal, and require immediate nursing action.</strong> Postpartum hemorrhage, eclampsia, shoulder dystocia, and cord prolapse — you must recognize and respond in seconds.</div><div class="nursing-point"><strong>Reproductive assessments require exceptional communication skills.</strong> Sexual health history, pelvic exams, and discussions about reproductive choices demand cultural sensitivity and trauma-informed care.</div><div class="nursing-point"><strong>Medications during pregnancy carry unique risks.</strong> Every drug has a safety category; you must know which medications are contraindicated and counsel accordingly.</div><div class="nursing-point"><strong>Reproductive cancers require sensitive nursing care across the continuum.</strong> Cervical, ovarian, uterine, breast, prostate, and testicular cancers involve intimate assessments and emotionally complex conversations.</div></div>
+    </div>
+  </div>
+
+  <div class="remember-box">
+    <div class="remember-label">Remember This</div>
+    <div class="remember-title"><em>Menstrual cycle: Follicular (estrogen ↑) → Ovulation Day 14 → Luteal (progesterone ↑) → Menstruation</em></div>
+    <div class="remember-items"><div class="remember-item"><strong>hCG</strong> = pregnancy hormone; what tests detect; should double q48–72h in viable pregnancy</div><div class="remember-item"><strong>Magnesium toxicity</strong>: ↓ DTRs → respiratory depression → cardiac arrest; calcium gluconate = antidote</div><div class="remember-item"><strong>Preeclampsia vs eclampsia</strong>: pre = HTN + proteinuria | eclampsia = pre + SEIZURES</div><div class="remember-item"><strong>Placenta previa</strong>: painless bleeding, NO vaginal exams | <strong>Abruption</strong>: painful dark bleeding</div></div>
+  </div>
+</section></div>
+<div class="footer">A&amp;P Refresher &mdash; 11 Organ Systems &middot; The Pre-Nursing Study Collective &middot; Built in real time</div>
+<script>
+function switchSys(id,el){
+  document.querySelectorAll('.system-section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.sys-tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
