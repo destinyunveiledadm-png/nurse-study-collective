@@ -7,102 +7,99 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink:     #0e1117;
-    --gold:    #c9a84c;
-    --gold-lt: #e8c96a;
-    --gold-dim:#7a6530;
-    --sage:    #3d6b5a;
-    --cream:   #f7f2ea;
-    --cream-d: #ede5d4;
-    --white:   #ffffff;
-    --muted:   #7a8398;
-    --lcream:  #faf7f2;
+    --ink:#0e1117;--gold:#c9a84c;--gold-lt:#e8c96a;--gold-dim:#7a6530;
+    --cream:#f7f2ea;--cream-d:#ede5d4;--white:#ffffff;--muted:#7a8398;--lcream:#faf7f2;
   }
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle at 12% 18%, rgba(201,168,76,0.07) 0%, transparent 52%), radial-gradient(circle at 88% 78%, rgba(61,107,90,0.06) 0%, transparent 50%); pointer-events: none; z-index: 0; }
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(247,242,234,0.9); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(201,168,76,0.18); }
-  .nav-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink); }
-  .nav-logo em { font-style: italic; color: var(--gold); }
-  .nav-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
-  .hero { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 140px 60px 80px; text-align: center; }
-  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 3px; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 28px; animation: fadeUp 0.7s ease both; }
-  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(44px, 7vw, 88px); line-height: 1.06; color: var(--ink); margin-bottom: 8px; animation: fadeUp 0.7s 0.1s ease both; }
-  .hero-title em { font-style: italic; color: var(--gold); }
-  .hero-personal { display: inline-block; background: var(--white); border: 1px solid var(--cream-d); box-shadow: 0 4px 24px rgba(0,0,0,0.06); color: var(--ink); font-size: 14px; font-weight: 400; line-height: 1.75; padding: 28px 36px; border-radius: 16px; max-width: 520px; margin: 32px auto 40px; animation: fadeUp 0.7s 0.2s ease both; position: relative; text-align: left; }
-  .hero-personal::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 52px; color: var(--gold); position: absolute; top: -16px; left: 20px; line-height: 1; }
-  .hero-personal strong { color: var(--gold-dim); font-weight: 600; }
-  .hero-stats { display: flex; gap: 40px; justify-content: center; animation: fadeUp 0.7s 0.3s ease both; margin-bottom: 60px; }
-  .stat { text-align: center; }
-  .stat-num { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--ink); line-height: 1; }
-  .stat-label { font-size: 10.5px; color: var(--muted); letter-spacing: 0.5px; margin-top: 4px; font-weight: 500; }
-  .stat-divider { width: 1px; background: var(--cream-d); align-self: stretch; }
-  .hero-scroll { font-size: 11px; color: var(--muted); letter-spacing: 1px; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: fadeUp 0.7s 0.4s ease both; }
-  .hero-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollPulse 2s infinite; }
-  @keyframes scrollPulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-  .section { position: relative; z-index: 1; padding: 80px 60px; max-width: 1200px; margin: 0 auto; }
-  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 44px; }
-  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; color: var(--gold-dim); text-transform: uppercase; flex-shrink: 0; }
-  .section-title { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--ink); font-weight: 400; }
-  .section-line { flex: 1; height: 1px; background: var(--cream-d); margin-left: 12px; }
-  .live-card { background: var(--ink); border-radius: 20px; padding: 44px 50px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; position: relative; overflow: hidden; animation: fadeUp 0.6s 0.5s ease both; text-decoration: none; transition: transform 0.25s, box-shadow 0.25s; }
-  .live-card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(14,17,23,0.28); }
-  .live-card::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.12); pointer-events: none; }
-  .live-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(61,107,90,0.25); border: 1px solid rgba(78,138,114,0.4); color: #6dbf9e; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 16px; }
-  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #6dbf9e; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
-  .live-card-title { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--white); font-weight: 400; line-height: 1.2; margin-bottom: 8px; }
-  .live-card-title em { font-style: italic; color: var(--gold-lt); }
-  .live-card-desc { font-size: 13.5px; color: rgba(255,255,255,0.52); line-height: 1.65; max-width: 460px; margin-bottom: 22px; font-weight: 300; }
-  .live-card-pills { display: flex; flex-wrap: wrap; gap: 7px; }
-  .live-pill { background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.25); color: var(--gold-lt); padding: 3px 11px; border-radius: 14px; font-size: 11px; font-weight: 500; }
-  .live-card-arrow { width: 54px; height: 54px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--ink); flex-shrink: 0; transition: transform 0.2s; z-index: 1; }
-  .live-card:hover .live-card-arrow { transform: translate(4px,-4px); }
-  .coming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 18px; }
-  .soon-card { background: var(--white); border-radius: 16px; padding: 30px; border: 1px solid rgba(0,0,0,0.055); position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; animation: fadeUp 0.5s ease both; }
-  .soon-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.07); }
-  .soon-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--card-accent, var(--cream-d)); }
-  .soon-card-number { font-family: 'Playfair Display', serif; font-size: 44px; color: var(--cream-d); line-height: 1; margin-bottom: 14px; font-weight: 700; }
-  .soon-card-subject { font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
-  .soon-card-title { font-family: 'Playfair Display', serif; font-size: 21px; color: var(--ink); font-weight: 400; margin-bottom: 10px; line-height: 1.3; }
-  .soon-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; font-weight: 300; }
-  .soon-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; }
-  .soon-badge::before { content: ''; width: 18px; height: 1px; background: var(--cream-d); }
-  .about-strip { position: relative; z-index: 1; background: var(--ink); padding: 60px; }
-  .about-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-  .about-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 16px; }
-  .about-title { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--white); font-weight: 400; line-height: 1.2; margin-bottom: 16px; }
-  .about-title em { font-style: italic; color: var(--gold-lt); }
-  .about-body { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.75; font-weight: 300; }
-  .about-body strong { color: rgba(255,255,255,0.85); font-weight: 500; }
-  .about-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .fact-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; }
-  .fact-num { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold-lt); line-height: 1; margin-bottom: 6px; }
-  .fact-label { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; font-weight: 300; }
-  footer { position: relative; z-index: 1; text-align: center; padding: 44px 60px; border-top: 1px solid var(--cream-d); }
-  .footer-logo { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 8px; }
-  .footer-logo em { font-style: italic; color: var(--gold); }
-  .footer-sub { font-size: 12px; color: var(--muted); letter-spacing: 0.3px; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .hero { padding: 110px 24px 60px; }
-    .section { padding: 56px 24px; }
-    .live-card { grid-template-columns: 1fr; padding: 30px; gap: 20px; }
-    .live-card-arrow { display: none; }
-    .hero-stats { gap: 24px; }
-    .about-strip { padding: 48px 24px; }
-    .about-inner { grid-template-columns: 1fr; gap: 36px; }
-    footer { padding: 36px 24px; }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 12% 18%,rgba(201,168,76,0.07) 0%,transparent 52%),radial-gradient(circle at 88% 78%,rgba(61,107,90,0.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,242,234,0.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(201,168,76,0.18);}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);}
+  .nav-logo em{font-style:italic;color:var(--gold);}
+  .nav-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+  .hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:140px 60px 80px;text-align:center;}
+  .hero-eyebrow{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:3px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:28px;animation:fadeUp 0.7s ease both;}
+  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(44px,7vw,88px);line-height:1.06;color:var(--ink);margin-bottom:8px;animation:fadeUp 0.7s 0.1s ease both;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-personal{display:inline-block;background:var(--white);border:1px solid var(--cream-d);box-shadow:0 4px 24px rgba(0,0,0,0.06);color:var(--ink);font-size:14px;font-weight:400;line-height:1.75;padding:28px 36px;border-radius:16px;max-width:520px;margin:32px auto 40px;animation:fadeUp 0.7s 0.2s ease both;position:relative;text-align:left;}
+  .hero-personal::before{content:'\201C';font-family:'Playfair Display',serif;font-size:52px;color:var(--gold);position:absolute;top:-16px;left:20px;line-height:1;}
+  .hero-personal strong{color:var(--gold-dim);font-weight:600;}
+  .hero-stats{display:flex;gap:40px;justify-content:center;animation:fadeUp 0.7s 0.3s ease both;margin-bottom:60px;}
+  .stat{text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:30px;color:var(--ink);line-height:1;}
+  .stat-label{font-size:10.5px;color:var(--muted);letter-spacing:0.5px;margin-top:4px;font-weight:500;}
+  .stat-divider{width:1px;background:var(--cream-d);align-self:stretch;}
+  .hero-scroll{font-size:11px;color:var(--muted);letter-spacing:1px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 0.7s 0.4s ease both;}
+  .hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite;}
+  @keyframes scrollPulse{0%,100%{opacity:.4}50%{opacity:1}}
+  .section{position:relative;z-index:1;padding:80px 60px;max-width:1200px;margin:0 auto;}
+  .section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:44px;}
+  .section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;color:var(--gold-dim);text-transform:uppercase;flex-shrink:0;}
+  .section-title{font-family:'Playfair Display',serif;font-size:30px;color:var(--ink);font-weight:400;}
+  .section-line{flex:1;height:1px;background:var(--cream-d);margin-left:12px;}
+  .live-cards{display:flex;flex-direction:column;gap:20px;}
+  .live-card{background:var(--ink);border-radius:20px;padding:44px 50px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;position:relative;overflow:hidden;animation:fadeUp 0.6s 0.5s ease both;text-decoration:none;transition:transform 0.25s,box-shadow 0.25s;}
+  .live-card:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(14,17,23,0.28);}
+  .live-card::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;border:1px solid rgba(201,168,76,0.12);pointer-events:none;}
+  .live-card.sage{background:linear-gradient(135deg,#1a3a2a 0%,#0f2a1a 100%);}
+  .live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(61,107,90,0.25);border:1px solid rgba(78,138,114,0.4);color:#6dbf9e;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;margin-bottom:16px;}
+  .live-dot{width:6px;height:6px;border-radius:50%;background:#6dbf9e;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+  .live-card-title{font-family:'Playfair Display',serif;font-size:34px;color:var(--white);font-weight:400;line-height:1.2;margin-bottom:8px;}
+  .live-card-title em{font-style:italic;color:var(--gold-lt);}
+  .live-card-desc{font-size:13.5px;color:rgba(255,255,255,0.52);line-height:1.65;max-width:460px;margin-bottom:22px;font-weight:300;}
+  .live-card-pills{display:flex;flex-wrap:wrap;gap:7px;}
+  .live-pill{background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);color:var(--gold-lt);padding:3px 11px;border-radius:14px;font-size:11px;font-weight:500;}
+  .live-pill.green{background:rgba(61,107,90,0.2);border-color:rgba(61,107,90,0.4);color:#8de0b8;}
+  .live-card-arrow{width:54px;height:54px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--ink);flex-shrink:0;transition:transform 0.2s;z-index:1;}
+  .live-card:hover .live-card-arrow{transform:translate(4px,-4px);}
+  .coming-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;}
+  .soon-card{background:var(--white);border-radius:16px;padding:30px;border:1px solid rgba(0,0,0,0.055);position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;animation:fadeUp 0.5s ease both;}
+  .soon-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.07);}
+  .soon-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--card-accent,var(--cream-d));}
+  .soon-card-number{font-family:'Playfair Display',serif;font-size:44px;color:var(--cream-d);line-height:1;margin-bottom:14px;font-weight:700;}
+  .soon-card-subject{font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+  .soon-card-title{font-family:'Playfair Display',serif;font-size:21px;color:var(--ink);font-weight:400;margin-bottom:10px;line-height:1.3;}
+  .soon-card-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:18px;font-weight:300;}
+  .soon-badge{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;color:var(--muted);letter-spacing:0.5px;}
+  .soon-badge::before{content:'';width:18px;height:1px;background:var(--cream-d);}
+  .about-strip{position:relative;z-index:1;background:var(--ink);padding:60px;}
+  .about-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  .about-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:16px;}
+  .about-title{font-family:'Playfair Display',serif;font-size:34px;color:var(--white);font-weight:400;line-height:1.2;margin-bottom:16px;}
+  .about-title em{font-style:italic;color:var(--gold-lt);}
+  .about-body{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.75;font-weight:300;}
+  .about-body strong{color:rgba(255,255,255,0.85);font-weight:500;}
+  .about-facts{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .fact-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;}
+  .fact-num{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold-lt);line-height:1;margin-bottom:6px;}
+  .fact-label{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.5;font-weight:300;}
+  footer{position:relative;z-index:1;text-align:center;padding:44px 60px;border-top:1px solid var(--cream-d);}
+  .footer-logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);margin-bottom:8px;}
+  .footer-logo em{font-style:italic;color:var(--gold);}
+  .footer-sub{font-size:12px;color:var(--muted);letter-spacing:0.3px;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:768px){
+    nav{padding:16px 24px;}
+    .hero{padding:110px 24px 60px;}
+    .section{padding:56px 24px;}
+    .live-card{grid-template-columns:1fr;padding:30px;gap:20px;}
+    .live-card-arrow{display:none;}
+    .hero-stats{gap:24px;}
+    .about-strip{padding:48px 24px;}
+    .about-inner{grid-template-columns:1fr;gap:36px;}
+    footer{padding:36px 24px;}
   }
 </style>
 </head>
 <body>
+
 <nav>
   <div class="nav-logo">The Pre-Nursing Study <em>Collective</em></div>
   <div class="nav-tag">Resources for the Journey</div>
 </nav>
+
 <div class="hero">
   <div class="hero-eyebrow">Built in real time &mdash; one course at a time</div>
   <h1 class="hero-title">Resources for the<br><em>Nursing Journey</em></h1>
@@ -113,9 +110,9 @@
     in the thick of it. Come study with me.
   </div>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">1</div><div class="stat-label">Resource Live</div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Resources Live</div></div>
     <div class="stat-divider"></div>
-    <div class="stat"><div class="stat-num">7</div><div class="stat-label">In Progress</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">In Progress</div></div>
     <div class="stat-divider"></div>
     <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Always</div></div>
   </div>
@@ -124,28 +121,53 @@
     <span>See what&rsquo;s available</span>
   </div>
 </div>
+
 <div class="section">
   <div class="section-header">
     <span class="section-label">Available Now</span>
     <h2 class="section-title">Ready to Use</h2>
     <div class="section-line"></div>
   </div>
-  <a class="live-card" href="raas_inhibitors_study_guide.html">
-    <div>
-      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-      <div class="live-card-title">RAAS <em>Inhibitors</em></div>
-      <p class="live-card-desc">An interactive deep dive into the renin-angiotensin-aldosterone system &mdash; six tabbed sections covering mechanisms, pharmacokinetics, indications, and adverse effects. Includes clickable drug class cards, mnemonics, and a full comparison table.</p>
-      <div class="live-card-pills">
-        <span class="live-pill">ACE Inhibitors</span>
-        <span class="live-pill">ARBs</span>
-        <span class="live-pill">Direct Renin Inhibitors</span>
-        <span class="live-pill">ARNIs</span>
-        <span class="live-pill">Aldosterone Antagonists</span>
+
+  <div class="live-cards">
+
+    <a class="live-card" href="raas_inhibitors_study_guide.html">
+      <div>
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+        <div class="live-card-title">RAAS <em>Inhibitors</em></div>
+        <p class="live-card-desc">An interactive deep dive into the renin-angiotensin-aldosterone system &mdash; six tabbed sections covering mechanisms, pharmacokinetics, indications, and adverse effects. Includes clickable drug class cards, mnemonics, and a full comparison table.</p>
+        <div class="live-card-pills">
+          <span class="live-pill">ACE Inhibitors</span>
+          <span class="live-pill">ARBs</span>
+          <span class="live-pill">Direct Renin Inhibitors</span>
+          <span class="live-pill">ARNIs</span>
+          <span class="live-pill">Aldosterone Antagonists</span>
+        </div>
       </div>
-    </div>
-    <div class="live-card-arrow">&#x2197;</div>
-  </a>
+      <div class="live-card-arrow">&#x2197;</div>
+    </a>
+
+    <a class="live-card sage" href="ap_refresher.html">
+      <div>
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+        <div class="live-card-title">A&amp;P Refresher &mdash; <em>11 Organ Systems</em></div>
+        <p class="live-card-desc">A comprehensive pre-nursing anatomy and physiology reference covering all 11 organ systems &mdash; key structures, functions, common pathologies, lab values, medications, diagnostics, patient education, and nursing clinical connections.</p>
+        <div class="live-card-pills">
+          <span class="live-pill green">Integumentary</span>
+          <span class="live-pill green">Skeletal</span>
+          <span class="live-pill green">Muscular</span>
+          <span class="live-pill green">Nervous</span>
+          <span class="live-pill green">Endocrine</span>
+          <span class="live-pill green">Cardiovascular</span>
+          <span class="live-pill green">+ 5 more systems</span>
+        </div>
+      </div>
+      <div class="live-card-arrow">&#x2197;</div>
+    </a>
+
+  </div>
 </div>
+
 <div class="section" style="padding-top:0">
   <div class="section-header">
     <span class="section-label">Being Built</span>
@@ -154,48 +176,41 @@
   </div>
   <div class="coming-grid">
     <div class="soon-card" style="--card-accent:#c9620a;animation-delay:.05s">
-      <div class="soon-card-number">02</div>
+      <div class="soon-card-number">03</div>
       <div class="soon-card-subject">BIO280</div>
       <div class="soon-card-title">Pathophysiology</div>
       <p class="soon-card-desc">Disease mechanisms, cellular injury, inflammation, and organ system dysfunction &mdash; the foundation of clinical reasoning.</p>
       <div class="soon-badge">Coming Soon</div>
     </div>
     <div class="soon-card" style="--card-accent:#1e4a8a;animation-delay:.1s">
-      <div class="soon-card-number">03</div>
+      <div class="soon-card-number">04</div>
       <div class="soon-card-subject">BIO290</div>
       <div class="soon-card-title">Pharmacology</div>
       <p class="soon-card-desc">Drug classifications, mechanisms of action, indications, interactions, and adverse effects across major drug classes.</p>
       <div class="soon-badge">Coming Soon</div>
     </div>
     <div class="soon-card" style="--card-accent:#2d7a5f;animation-delay:.15s">
-      <div class="soon-card-number">04</div>
+      <div class="soon-card-number">05</div>
       <div class="soon-card-subject">NUR103</div>
       <div class="soon-card-title">Intro to Nursing</div>
       <p class="soon-card-desc">Professional identity, nursing theory, scope of practice, and the foundations of patient-centered care.</p>
       <div class="soon-badge">Coming Soon</div>
     </div>
     <div class="soon-card" style="--card-accent:#5a2d82;animation-delay:.2s">
-      <div class="soon-card-number">05</div>
+      <div class="soon-card-number">06</div>
       <div class="soon-card-subject">Clinical Skills</div>
       <div class="soon-card-title">Dosage Calculations</div>
       <p class="soon-card-desc">Dimensional analysis, weight-based dosing, IV drip rates, and pediatric calculations with practice problems.</p>
       <div class="soon-badge">Coming Soon</div>
     </div>
-    <div class="soon-card" style="--card-accent:#8b2a2a;animation-delay:.25s">
-      <div class="soon-card-number">06</div>
-      <div class="soon-card-subject">Sciences</div>
-      <div class="soon-card-title">Anatomy &amp; Physiology</div>
-      <p class="soon-card-desc">Body systems, physiologic processes, and the structural foundations underpinning clinical assessment and intervention.</p>
-      <div class="soon-badge">Coming Soon</div>
-    </div>
-    <div class="soon-card" style="--card-accent:#c9a84c;animation-delay:.3s">
+    <div class="soon-card" style="--card-accent:#c9a84c;animation-delay:.25s">
       <div class="soon-card-number">07</div>
       <div class="soon-card-subject">NUR302</div>
       <div class="soon-card-title">Contemporary Nursing Issues</div>
       <p class="soon-card-desc">Healthcare policy, ethics, equity, interprofessional collaboration, and nursing&rsquo;s evolving role in modern systems.</p>
       <div class="soon-badge">Coming Soon</div>
     </div>
-    <div class="soon-card" style="--card-accent:#3d6b5a;animation-delay:.35s">
+    <div class="soon-card" style="--card-accent:#3d6b5a;animation-delay:.3s">
       <div class="soon-card-number">08</div>
       <div class="soon-card-subject">Foundation</div>
       <div class="soon-card-title">Medical Terminology</div>
@@ -204,6 +219,7 @@
     </div>
   </div>
 </div>
+
 <div class="about-strip">
   <div class="about-inner">
     <div>
@@ -216,28 +232,18 @@
       </p>
     </div>
     <div class="about-facts">
-      <div class="fact-card">
-        <div class="fact-num">17+</div>
-        <div class="fact-label">Years in healthcare before nursing school</div>
-      </div>
-      <div class="fact-card">
-        <div class="fact-num">MBA<br>MPH</div>
-        <div class="fact-label">Graduate degrees &mdash; still a student at heart</div>
-      </div>
-      <div class="fact-card">
-        <div class="fact-num">Free</div>
-        <div class="fact-label">Every resource, every time, no exceptions</div>
-      </div>
-      <div class="fact-card">
-        <div class="fact-num">Real</div>
-        <div class="fact-label">Built from actual coursework, not textbook summaries</div>
-      </div>
+      <div class="fact-card"><div class="fact-num">17+</div><div class="fact-label">Years in healthcare before nursing school</div></div>
+      <div class="fact-card"><div class="fact-num">MBA<br>MPH</div><div class="fact-label">Graduate degrees &mdash; still a student at heart</div></div>
+      <div class="fact-card"><div class="fact-num">Free</div><div class="fact-label">Every resource, every time, no exceptions</div></div>
+      <div class="fact-card"><div class="fact-num">Real</div><div class="fact-label">Built from actual coursework, not textbook summaries</div></div>
     </div>
   </div>
 </div>
+
 <footer>
   <div class="footer-logo">The Pre-Nursing Study <em>Collective</em></div>
   <p class="footer-sub">Resources for the journey &mdash; built in real time, shared freely.</p>
 </footer>
+
 </body>
 </html>
